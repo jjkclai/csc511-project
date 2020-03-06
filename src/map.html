@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
 <body>
+    <div id="map_svg_container" class="svg_container">
+        <svg id="map_svg" class="svg"></svg>
+    </div>
 
 <script>
-    // write your d3 code here.. 
+    var map = d3.select("svg#map_svg").append("image")
+        .attr("xlink:href", "./assets/images/minimap.png")
+        .attr("width", "100%")
+        .attr("height", "100%")
 </script>
 </body>
 </html>
