@@ -9,6 +9,11 @@
         <svg id="map-svg" class="svg"></svg>
     </div>
 
+    <div id="map-options-container" class="options-container">
+        <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
+        <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
+    <div>
+
 <script>
     var mapSvg = d3.select("svg#map-svg");
 
@@ -16,6 +21,21 @@
         .attr("xlink:href", "./assets/images/minimap.png")
         .attr("width", "100%")
         .attr("height", "100%");
+    
+    d3.select("input#grid-checkbox-b").on("change", function() {
+        gridUpdate("b");
+    });
+    d3.select("input#grid-checkbox-r").on("change", function() {
+        gridUpdate("r");
+    });
+
+    function gridUpdate(side) {
+        if(d3.select("input#grid-checkbox-" + side).property("checked")){
+            showGrid(side);
+        } else {
+            hideGrid(side);
+        }
+    }
 
     function showGrid(side) {
         var targetX2 = (side == "b") ? "0%" : "100%";
