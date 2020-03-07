@@ -5,15 +5,71 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
 <body>
-    <div id="map_svg_container" class="svg_container">
-        <svg id="map_svg" class="svg"></svg>
+    <div id="map-svg-container" class="svg-container">
+        <svg id="map-svg" class="svg"></svg>
     </div>
 
 <script>
-    var map = d3.select("svg#map_svg").append("image")
+    var mapSvg = d3.select("svg#map-svg");
+
+    mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")
         .attr("width", "100%")
-        .attr("height", "100%")
+        .attr("height", "100%");
+
+    function showGrid(side) {
+        var targetX2 = (side == "b") ? "0%" : "100%";
+        var targetY2 = (side == "b") ? "100%" : "0%";
+
+        mapSvg.append("line")
+            .attr("class", "map-grid-" + side + " dashed-line")
+            .attr("x1", "14%")
+            .attr("y1", "14%")
+            .attr("x2", targetX2)
+            .attr("y2", targetY2)
+            .attr("stroke-width", 5)
+            .attr("stroke", "white");
+    
+        mapSvg.append("line")
+            .attr("class", "map-grid-" + side + " dashed-line")
+            .attr("x1", "32%")
+            .attr("y1", "32%")
+            .attr("x2", targetX2)
+            .attr("y2", targetY2)
+            .attr("stroke-width", 5)
+            .attr("stroke", "white");
+    
+        mapSvg.append("line")
+            .attr("class", "map-grid-" + side + " dashed-line")
+            .attr("x1", "50%")
+            .attr("y1", "50%")
+            .attr("x2", targetX2)
+            .attr("y2", targetY2)
+            .attr("stroke-width", 5)
+            .attr("stroke", "white");
+    
+        mapSvg.append("line")
+            .attr("class", "map-grid-" + side + " dashed-line")
+            .attr("x1", "68%")
+            .attr("y1", "68%")
+            .attr("x2", targetX2)
+            .attr("y2", targetY2)
+            .attr("stroke-width", 5)
+            .attr("stroke", "white");
+    
+        mapSvg.append("line")
+            .attr("class", "map-grid-" + side + " dashed-line")
+            .attr("x1", "86%")
+            .attr("y1", "86%")
+            .attr("x2", targetX2)
+            .attr("y2", targetY2)
+            .attr("stroke-width", 5)
+            .attr("stroke", "white");
+    }
+    
+    function hideGrid(side) {
+        d3.selectAll("line.map-grid-" + side).remove();
+    }
 </script>
 </body>
 </html>
