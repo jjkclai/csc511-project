@@ -12,16 +12,30 @@
     <div id="map-options-container" class="options-container">
         <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
         <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
+        <br>
+        <input type="button" id="debug-button" class="button" value="Click me">
     <div>
 
 <script>
-    var mapSvg = d3.select("svg#map-svg");
+    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/2019-worlds.csv").then(function(rows) {
+        window.data=rows;
+    });
+
+    window.mapSvg = d3.select("svg#map-svg");
 
     mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")
         .attr("width", "100%")
         .attr("height", "100%");
     
+    d3.select("input#debug-button").on("click", function() {
+        loadData("1070340");
+    });
+
+    function loadData(targetId) {
+        var targetData = window.data.filter(d => d["gameid"] == targetId);
+    }
+
     d3.select("input#grid-checkbox-b").on("change", function() {
         gridUpdate("b");
     });
