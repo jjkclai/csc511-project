@@ -15,3 +15,7 @@
 .dashed-line {
     stroke-dasharray: 5,5;
 }
+
+.heavy-font {
+    font: bold 2vh sans-serif;
+}

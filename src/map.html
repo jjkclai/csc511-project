@@ -34,6 +34,34 @@
 
     function loadData(targetId) {
         var targetData = window.data.filter(d => d["gameid"] == targetId);
+        visualize(targetData);
+    }
+
+    function visualize(data) {
+        visualizeTeam(data);
+    }
+
+    function visualizeTeam(data) {
+        var blueTeam = data.filter(d => d["side"] == "Blue");
+        var redTeam = data.filter(d => d["side"] == "Red");
+
+        mapSvg.append("text")
+            .attr("class", "team-text heavy-font")
+            .attr("x", "15%")
+            .attr("y", "85%")
+            .attr("fill", "blue")
+            .attr("dominant-baseline", "middle")
+            .attr("text-anchor", "middle")
+            .text(blueTeam[0]["team"]);
+        
+        mapSvg.append("text")
+            .attr("class", "team-text heavy-font")
+            .attr("x", "85%")
+            .attr("y", "15%")
+            .attr("fill", "red")
+            .attr("dominant-baseline", "middle")
+            .attr("text-anchor", "middle")
+            .text(redTeam[0]["team"]);
     }
 
     d3.select("input#grid-checkbox-b").on("change", function() {
