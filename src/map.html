@@ -64,6 +64,23 @@
             .text(redTeam[0]["team"]);
     }
 
+    function getIntersection(lineA, lineB) {
+        xDiff = [(lineA[0][0] - lineA[1][0]), (lineB[0][0] - lineB[1][0])];
+        yDiff = [(lineA[0][1] - lineA[1][1]), (lineB[0][1] - lineB[1][1])];
+
+        function det(a, b) {
+            return a[0] * b[1] - a[1] * b[0];
+        }
+
+        div = det(xDiff, yDiff);
+
+        d = [det(lineA[0], lineA[1]), det(lineB[0], lineB[1])];
+        x = det(d, xDiff) / div;
+        y = det(d, yDiff) / div;
+
+        return [x, y];
+    }
+
     d3.select("input#grid-checkbox-b").on("change", function() {
         gridUpdate("b");
     });
