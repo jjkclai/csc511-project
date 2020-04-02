@@ -47,6 +47,7 @@
         const redTeam = data.filter(d => d["side"] == "Red");
 
         mapSvg.append("text")
+            .attr("id", blueTeam[0]["gameid"] + "-" + "blue")
             .attr("class", "team-text heavy-font")
             .attr("x", "15%")
             .attr("y", "85%")
@@ -56,6 +57,7 @@
             .text(blueTeam[0]["team"]);
         
         mapSvg.append("text")
+            .attr("id", redTeam[0]["gameid"] + "-" + "red")
             .attr("class", "team-text heavy-font")
             .attr("x", "85%")
             .attr("y", "15%")
