@@ -71,6 +71,14 @@
         return getIntersection([[0, 0], [p, (100 - p)]], getLineB(player));
     }
 
+    function getIconRad(player, blueTeam, redTeam) {
+        var pGold = player["totalgold"] - 0;
+        var bGold = blueTeam[0]["totalgold"] - 0;
+        var rGold = redTeam[0]["totalgold"] - 0;
+
+        return 20 * (pGold / (bGold + rGold));
+    }
+
     function getLineB(player) {
         function getBase(side) {
             if(side == "Blue") {
