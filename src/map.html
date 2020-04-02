@@ -64,6 +64,30 @@
             .text(redTeam[0]["team"]);
     }
 
+    function getLineB(player) {
+        function getBase(side) {
+            if(side == "Blue") {
+                return 45;
+            }
+            return 55;
+        }
+
+        function getDirection(side) {
+            if(side == "Blue") {
+                return 1;
+            }
+            return -1;
+        }
+
+        function getOffset(k, d, a) {
+            return 2 * k + (-2) * d + 1 * a;
+        }
+
+        var p = getBase(player["side"]) + getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
+
+        return [[0, 2 * p], [2 * p, 0]];
+    }
+
     function getIntersection(lineA, lineB) {
         xDiff = [(lineA[0][0] - lineA[1][0]), (lineB[0][0] - lineB[1][0])];
         yDiff = [(lineA[0][1] - lineA[1][1]), (lineB[0][1] - lineB[1][1])];
