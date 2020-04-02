@@ -33,7 +33,7 @@
     });
 
     function loadData(targetId) {
-        var targetData = window.data.filter(d => d["gameid"] == targetId);
+        const targetData = window.data.filter(d => d["gameid"] == targetId);
         visualize(targetData);
     }
 
@@ -43,8 +43,8 @@
     }
 
     function visualizeTeam(data) {
-        var blueTeam = data.filter(d => d["side"] == "Blue");
-        var redTeam = data.filter(d => d["side"] == "Red");
+        const blueTeam = data.filter(d => d["side"] == "Blue");
+        const redTeam = data.filter(d => d["side"] == "Red");
 
         mapSvg.append("text")
             .attr("class", "team-text heavy-font")
@@ -66,9 +66,9 @@
     }
 
     function visualizePlayer(data) {
-        var players = data.filter(d => d["playerid"] <= 10);
-        var blueTeam = data.filter(d => d["playerid"] == 100);
-        var redTeam = data.filter(d => d["playerid"] == 200);
+        const blueTeam = data.filter(d => d["playerid"] == 100);
+        const redTeam = data.filter(d => d["playerid"] == 200);
+        const players = data.filter(d => d["playerid"] <= 10);
 
         players.sort(function(a, b) {
             if(a["totalgold"] > b["totalgold"]) {
@@ -101,16 +101,16 @@
     }
 
     function getIconPos(player) {
-        var targetP1 = [14, 32, 50, 68, 86];
+        const targetP1 = [14, 32, 50, 68, 86];
 
-        var p = targetP1[(player["playerid"] - 1) % 5];
+        const p = targetP1[(player["playerid"] - 1) % 5];
         return getIntersection([[0, 0], [p, (100 - p)]], getLineB(player));
     }
 
     function getIconRad(player, blueTeam, redTeam) {
-        var pGold = player["totalgold"] - 0;
-        var bGold = blueTeam[0]["totalgold"] - 0;
-        var rGold = redTeam[0]["totalgold"] - 0;
+        const pGold = player["totalgold"] - 0;
+        const bGold = blueTeam[0]["totalgold"] - 0;
+        const rGold = redTeam[0]["totalgold"] - 0;
 
         return 20 * (pGold / (bGold + rGold));
     }
@@ -134,7 +134,7 @@
             return 2 * k + (-2) * d + 1 * a;
         }
 
-        var p = getBase(player["side"]) + getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
+        const p = getBase(player["side"]) + getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
 
         return [[0, 2 * p], [2 * p, 0]];
     }
@@ -172,9 +172,9 @@
     }
 
     function showGrid(side) {
-        var targetP1 = ["14%", "32%", "50%", "68%", "86%"];
-        var targetX2 = (side == "b") ? "0%" : "100%";
-        var targetY2 = (side == "b") ? "100%" : "0%";
+        const targetP1 = ["14%", "32%", "50%", "68%", "86%"];
+        const targetX2 = (side == "b") ? "0%" : "100%";
+        const targetY2 = (side == "b") ? "100%" : "0%";
 
         targetP1.forEach(function(item, index) {
             mapSvg.append("line")
