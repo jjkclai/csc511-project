@@ -6,6 +6,7 @@
 </head>
 <body>
     <div id="map-svg-container" class="svg-container">
+        <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
         <svg id="map-svg" class="svg"></svg>
     </div>
 
@@ -22,6 +23,7 @@
     });
 
     window.mapSvg = d3.select("svg#map-svg");
+    window.mapSvgTooltip = d3.select("div#map-svg-tooltip");
 
     mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")

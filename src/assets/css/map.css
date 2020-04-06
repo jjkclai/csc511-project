@@ -19,3 +19,16 @@
 .heavy-font {
     font: bold 2vh sans-serif;
 }
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    font: 15px sans-serif;
+    background: #756F98;
+    border: 0px;
+    border-radius: 8px;	
+    pointer-events: none;
+}
