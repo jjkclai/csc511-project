@@ -32,3 +32,14 @@
     border-radius: 8px;	
     pointer-events: none;
 }
+
+.tooltip-image {
+    float: left;
+    padding: 2px;
+}
+
+.tooltip-text {
+    float: right;
+    text-align: left;
+    padding: 2px;
+}

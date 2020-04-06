@@ -104,7 +104,51 @@
             })
             .attr("r", function(d) {
                 return getIconRad(d, blueTeam, redTeam) + "%";
-            });
+            })
+            .on("mouseover", playerMouseOver)
+            .on("mousemove", playerMouseMove)
+            .on("mouseout", playerMouseOut);
+    }
+
+    function playerMouseOver(d, i) {
+        mapSvgTooltip.transition()
+            .duration(200)
+            .style("opacity", 0.9);
+        
+        mapSvgTooltip.html(
+            "<img class='tooltip-image' src='" + "./assets/images/" + d["champion"] + "Square.png" + "'>" +
+            "<div class='tooltip-text'>" +
+                "<table>" +
+                    "<tr>" +
+                        "<th>Team</th>" +
+                        "<td>" + d["team"] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<th>Player</th>" +
+                        "<td>" + d["player"] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<th>KDA</th>" +
+                        "<td>" + d["k"] + "/" + d["d"] + "/" + d["a"] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<th>Gold</th>" +
+                        "<td>" + d["totalgold"] + "</td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>"
+        );
+    }
+
+    function playerMouseMove(d, i) {
+        mapSvgTooltip.style("top", (event.pageY-10)+"px")
+            .style("left",(event.pageX+10)+"px");
+    }
+
+    function playerMouseOut(d, i) {
+        mapSvgTooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
     }
 
     function getIconPos(player) {
