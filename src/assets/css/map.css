@@ -1,11 +1,21 @@
 .svg-container {
-    width: min(90vw, 90vh);
-    height: min(90vw, 90vh);
+    margin: 10px;
+}
+
+#map-svg-container {
+    width: min(87vw, 87vh);
+    height: min(87vw, 87vh);
+}
+
+#time-svg-container {
+    width: min(87vw, 87vh);
+    height: 10vh;
 }
 
 .svg {
     width: 100%;
     height: 100%;
+    outline: 1px solid black;
 }
 
 .solid-line {
