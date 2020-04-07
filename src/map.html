@@ -52,18 +52,21 @@
         .attr("width", "100%")
         .attr("height", "100%");
 
-    function loadData(targetId) {
+    function loadData(targetId, isTeam, isPlayer) {
         const target = window.data.filter(d => d["gameid"] == targetId);
-        visualize(target);
+
+        if(isTeam == 1) {
+            visualizeTeam(target);
+        }
+
+        if(isPlayer == 1) {
+            visualizePlayer(target);
+        }
     }
 
     function unloadData(targetId) {
+        mapSvg.selectAll(".team-object").filter("._" + targetId).remove();
         mapSvg.selectAll(".player-object").filter("._" + targetId).remove();
-    }
-
-    function visualize(data) {
-        //visualizeTeam(data);
-        visualizePlayer(data);
     }
 
     function unVisualize() {
@@ -82,9 +85,7 @@
 
         mapSvg.append("text")
             .attr("id", blueTeam[0]["gameid"] + "-" + "blue")
-            .attr("class", function(d) {
-                return "team-text heavy-font team-object _" + d["gameid"];
-            })
+            .attr("class", "team-text heavy-font team-object _" + blueTeam[0]["gameid"])
             .attr("x", "15%")
             .attr("y", "85%")
             .attr("fill", "blue")
@@ -94,9 +95,7 @@
         
         mapSvg.append("text")
             .attr("id", redTeam[0]["gameid"] + "-" + "red")
-            .attr("class", function(d) {
-                return "team-text heavy-font team-object _" + d["gameid"];
-            })
+            .attr("class", "team-text heavy-font team-object _" + redTeam[0]["gameid"])
             .attr("x", "85%")
             .attr("y", "15%")
             .attr("fill", "red")
@@ -158,6 +157,12 @@
             .transition()
             .duration(100)
             .style("opacity", playerObjectOnOpacity);
+        
+        timeSvg.selectAll(".match-object").filter("._" + d["gameid"])
+            .transition()
+            .duration(100)
+            .style("opacity", matchObjectOnOpacity)
+            .style("fill", "black");
 
         mapSvgTooltip.transition()
             .duration(200)
@@ -201,6 +206,19 @@
             .transition()
             .duration(100)
             .style("opacity", playerObjectOffOpacity);
+        
+        timeSvg.selectAll(".match-object").filter("._" + d["gameid"])
+            .transition()
+            .duration(100)
+            .style("opacity", matchObjectOnOpacity)
+            .style("fill", function(d) {
+                if(d["result"] == "1") {
+                    return "blue";
+                }
+                else {
+                    return "red";
+                }
+            });
 
         mapSvgTooltip.transition()
             .duration(200)
@@ -332,7 +350,9 @@
                 .attr("id", function(d) {
                     return d["gameid"];
                 })
-                .attr("class", "match-object")
+                .attr("class", function(d) {
+                    return "match-object _" + d["gameid"];
+                })
                 .style("opacity", matchObjectOffOpacity)
                 .style("stroke", "black")
                 .style("fill", function(d) {
@@ -359,8 +379,12 @@
             })
             .transition()
             .duration(100)
-            .style("opacity", matchObjectOnOpacity);
+            .style("opacity", matchObjectOnOpacity)
+            .style("fill", "black");
+            
         
+        loadData(d["gameid"], 1, 1);
+
         mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
             .transition()
             .duration(100)
@@ -398,12 +422,34 @@
             })
         
         if(target.attr("class").includes("on")) {
+            target.transition()
+            .duration(100)
+            .style("fill", function(d) {
+                if(d["result"] == "1") {
+                    return "blue";
+                }
+                else {
+                    return "red";
+                }
+            });
 
+            unloadData(d["gameid"]);
+            loadData(d["gameid"], 0, 1)
         }
         else {
             target.transition()
             .duration(100)
-            .style("opacity", matchObjectOffOpacity);
+            .style("opacity", matchObjectOffOpacity)
+            .style("fill", function(d) {
+                if(d["result"] == "1") {
+                    return "blue";
+                }
+                else {
+                    return "red";
+                }
+            });
+
+            unloadData(d["gameid"]);
         }
 
         mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
@@ -423,11 +469,9 @@
             })
         
         if(target.attr("class").includes("on")) {
-            unloadData(d["gameid"]);
             target.attr("class", target.attr("class").replace(" on", ""));
         }
         else {
-            loadData(d["gameid"]);
             target.attr("class", target.attr("class") + " on");
         }
     }
