@@ -12,6 +12,13 @@
     height: 20vh;
 }
 
+#query-system-container {
+    margin: 10px;
+    width: 20vw;
+    height: 50vh;
+    border: 1px;
+}
+
 .svg {
     width: 100%;
     height: 100%;

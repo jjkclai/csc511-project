@@ -5,20 +5,28 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/map.css">
 </head>
 <body>
-    <div id="map-svg-container" class="svg-container">
-        <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
-        <svg id="map-svg" class="svg"></svg>
+    <div style="float: left">
+        <div id="map-svg-container" class="svg-container">
+            <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
+            <svg id="map-svg" class="svg"></svg>
+        </div>
+
+        <div id="time-svg-container" class="svg-container">
+            <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
+            <svg id="time-svg" class="svg"></svg>
+        </div>
     </div>
 
-    <div id="time-svg-container" class="svg-container">
-        <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
-        <svg id="time-svg" class="svg"></svg>
-    </div>
+    <div style="float:right">
+        <div id="query-system-container" class="query-system-container">
 
-    <div id="map-options-container" class="options-container">
-        <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
-        <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
-    <div>
+        </div>
+
+        <div id="map-options-container" class="options-container">
+            <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
+            <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
+        <div>
+    </div>
 
 <script>
     const matchObjectOnOpacity = 0.9;
