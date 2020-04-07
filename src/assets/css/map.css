@@ -3,13 +3,13 @@
 }
 
 #map-svg-container {
-    width: min(87vw, 87vh);
-    height: min(87vw, 87vh);
+    width: min(77vw, 77vh);
+    height: min(77vw, 77vh);
 }
 
 #time-svg-container {
-    width: min(87vw, 87vh);
-    height: 10vh;
+    width: min(77vw, 77vh);
+    height: 20vh;
 }
 
 .svg {
@@ -37,10 +37,17 @@
     height: auto;
     padding: 10px;
     font: 15px sans-serif;
-    background: #756F98;
     border: 0px;
     border-radius: 8px;	
     pointer-events: none;
+}
+
+#map-svg-tooltip {
+    background: #756F98;
+}
+
+#time-svg-tooltip {
+    background: #FFFFFF;
 }
 
 .tooltip-image {

@@ -11,40 +11,50 @@
     </div>
 
     <div id="time-svg-container" class="svg-container">
+        <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
         <svg id="time-svg" class="svg"></svg>
     </div>
 
     <div id="map-options-container" class="options-container">
         <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
         <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
-        <br>
-        <input type="button" id="debug-button" class="button" value="Click me">
     <div>
 
 <script>
+    const matchObjectOnOpacity = 0.9;
+    const matchObjectOffOpacity = 0.3;
+    const playerObjectOnOpacity = 0.9;
+    const playerObjectOffOpacity = 0.4;
+    const tooltipObjectOnOpacity = 0.9;
+    const tooltipObjectOffOpacity = 0;
+
     d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/2019-worlds.csv").then(function(rows) {
         window.data=rows;
+
+        visualizeTime(data);
     });
 
     window.mapSvg = d3.select("svg#map-svg");
+    window.timeSvg = d3.select("svg#time-svg");
     window.mapSvgTooltip = d3.select("div#map-svg-tooltip");
+    window.timeSvgTooltip = d3.select("div#time-svg-tooltip");
 
     mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")
         .attr("width", "100%")
         .attr("height", "100%");
-    
-    d3.select("input#debug-button").on("click", function() {
-        loadData("1070340");
-    });
 
     function loadData(targetId) {
-        const targetData = window.data.filter(d => d["gameid"] == targetId);
-        visualize(targetData);
+        const target = window.data.filter(d => d["gameid"] == targetId);
+        visualize(target);
+    }
+
+    function unloadData(targetId) {
+        mapSvg.selectAll(".player-object").filter("._" + targetId).remove();
     }
 
     function visualize(data) {
-        visualizeTeam(data);
+        //visualizeTeam(data);
         visualizePlayer(data);
     }
 
@@ -54,7 +64,9 @@
 
         mapSvg.append("text")
             .attr("id", blueTeam[0]["gameid"] + "-" + "blue")
-            .attr("class", "team-text heavy-font")
+            .attr("class", function(d) {
+                return "team-text heavy-font team-object _" + d["gameid"];
+            })
             .attr("x", "15%")
             .attr("y", "85%")
             .attr("fill", "blue")
@@ -64,7 +76,9 @@
         
         mapSvg.append("text")
             .attr("id", redTeam[0]["gameid"] + "-" + "red")
-            .attr("class", "team-text heavy-font")
+            .attr("class", function(d) {
+                return "team-text heavy-font team-object _" + d["gameid"];
+            })
             .attr("x", "85%")
             .attr("y", "15%")
             .attr("fill", "red")
@@ -88,36 +102,48 @@
             return 0;
         });
 
-        mapSvg.selectAll("circle")
+        mapSvg.append("g")
+            .selectAll("circle")
             .data(players)
             .enter()
             .append("circle")
-            .attr("id", function(d) {
-                return d["gameid"] + "-" + d["side"].toLowerCase() + "-" + d["position"].toLowerCase();
-            })
-            .style("opacity", "0.75")
-            .style("stroke", "black")
-            .style("fill", function(d) {
-                return d["side"];
-            })
-            .attr("cx", function(d) {
-                return getIconPos(d)[0] + "%";
-            })
-            .attr("cy", function(d) {
-                return (100 - getIconPos(d)[1]) + "%";
-            })
-            .attr("r", function(d) {
-                return getIconRad(d, blueTeam, redTeam) + "%";
-            })
-            .on("mouseover", playerMouseOver)
-            .on("mousemove", playerMouseMove)
-            .on("mouseout", playerMouseOut);
+                .attr("id", function(d) {
+                    return d["gameid"] + "-" + d["side"].toLowerCase() + "-" + d["position"].toLowerCase();
+                })
+                .attr("class", function(d) {
+                    return "player-object _" + d["gameid"];
+                })
+                .style("opacity", playerObjectOffOpacity)
+                .style("stroke", "black")
+                .style("fill", function(d) {
+                    return d["side"];
+                })
+                .attr("cx", function(d) {
+                    return getIconPos(d)[0] + "%";
+                })
+                .attr("cy", function(d) {
+                    return (100 - getIconPos(d)[1]) + "%";
+                })
+                .attr("r", function(d) {
+                    return getIconRad(d, blueTeam, redTeam) + "%";
+                })
+                .on("mouseover", playerMouseOver)
+                .on("mousemove", playerMouseMove)
+                .on("mouseout", playerMouseOut);
     }
 
     function playerMouseOver(d, i) {
+        mapSvg.selectAll("circle")
+            .select(function(c) {
+                return c === d ? this : null;
+            })
+            .transition()
+            .duration(100)
+            .style("opacity", playerObjectOnOpacity);
+
         mapSvgTooltip.transition()
             .duration(200)
-            .style("opacity", 0.9);
+            .style("opacity", tooltipObjectOnOpacity);
         
         mapSvgTooltip.html(
             "<img class='tooltip-image' src='" + "./assets/images/" + d["champion"] + "Square.png" + "'>" +
@@ -150,9 +176,17 @@
     }
 
     function playerMouseOut(d, i) {
+        mapSvg.selectAll("circle")
+            .select(function(c) {
+                return c === d ? this : null;
+            })
+            .transition()
+            .duration(100)
+            .style("opacity", playerObjectOffOpacity);
+
         mapSvgTooltip.transition()
             .duration(200)
-            .style("opacity", 0);
+            .style("opacity", tooltipObjectOffOpacity);
     }
 
     function getIconPos(player) {
@@ -209,6 +243,179 @@
         y = det(d, yDiff) / div;
 
         return [x, y];
+    }
+
+    function visualizeTime(data) {
+        const schedule = data.filter(d => d["playerid"] == "1").map(function(d) {
+            const newData = {};
+            newData["gameid"] = d["gameid"];
+            newData["result"] = d["result"];
+            newData["datetime"] = convertExcelDateToJSDateTime(d["date"], 6);
+            newData["date"] = new Date(newData["datetime"].toDateString());
+
+            return newData;
+        });
+
+        schedule.sort(function(a, b) {
+            if(a["datetime"] > b["datetime"]) {
+                return 1;
+            }
+            else if(a["datetime"] < b["datetime"]) {
+                return -1;
+            }
+            return 0;
+        });
+
+        scheduleHash = {};
+        schedule.forEach(function(d) {
+            if(d["date"] in scheduleHash) {
+                scheduleHash[d["date"]]++;
+            }
+            else {
+                scheduleHash[d["date"]] = 1;
+            }
+
+            d["count"] = scheduleHash[d["date"]];
+        });
+        
+        const width = timeSvg.style("width").replace("px", "");
+        const height = timeSvg.style("height").replace("px", "");
+        const margin = width * 0.05;
+
+        const xScale = d3.scaleTime()
+            .domain(d3.extent(schedule, function(d) {
+                return d["date"];
+            }))
+            .range([margin, width - margin]);
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(schedule, function(d) {
+                return d["count"];
+            })])
+            .range([height - margin, margin]);
+        
+        const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y-%m-%d"));
+        const yAxis = d3.axisLeft(yScale);
+
+        const radius = (yScale(0) - yScale(1)) / 2;
+
+        timeSvg.append("g")
+            .call(xAxis)
+            .attr("transform", "translate(0, " + (height - margin) + ")");
+
+        timeSvg.append("g")
+            .call(yAxis)
+            .attr("transform", "translate(" + margin + ", 0)");
+        
+        timeSvg.append("g")
+            .selectAll("circle")
+            .data(schedule)
+            .enter()
+            .append("circle")
+                .attr("id", function(d) {
+                    return d["gameid"];
+                })
+                .attr("class", "match-object")
+                .style("opacity", matchObjectOffOpacity)
+                .style("stroke", "black")
+                .style("fill", function(d) {
+                    if(d["result"] == "1") {
+                        return "blue";
+                    }
+                    else {
+                        return "red";
+                    }
+                })
+                .attr("cx", d => xScale(d["date"]) + radius)
+                .attr("cy", d => yScale(d["count"]) + radius)
+                .attr("r", radius)
+                .on("mouseover", matchMouseOver)
+                .on("mousemove", matchMouseMove)
+                .on("mouseout", matchMouseOut)
+                .on("click", matchClick);
+    }
+
+    function matchMouseOver(d, i) {
+        timeSvg.selectAll("circle")
+            .select(function(c) {
+                return c === d ? this : null;
+            })
+            .transition()
+            .duration(100)
+            .style("opacity", matchObjectOnOpacity);
+        
+        mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
+            .transition()
+            .duration(100)
+            .style("opacity", playerObjectOnOpacity);
+
+        timeSvgTooltip.transition()
+            .duration(200)
+            .style("opacity", tooltipObjectOnOpacity);
+        
+        timeSvgTooltip.html(
+            "<div class='tooltip-text'>" +
+                "<table>" +
+                    "<tr>" +
+                        "<th>Game ID</th>" +
+                        "<td>" + d["gameid"] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<th>Date</th>" +
+                        "<td>" + d["date"].toDateString() + "</td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>"
+        );
+    }
+
+    function matchMouseMove(d, i) {
+        timeSvgTooltip.style("top", (event.pageY-10)+"px")
+            .style("left",(event.pageX+10)+"px");
+    }
+
+    function matchMouseOut(d, i) {
+        const target = timeSvg.selectAll("circle")
+            .select(function(c) {
+                return c === d ? this : null;
+            })
+        
+        if(target.attr("class").includes("on")) {
+
+        }
+        else {
+            target.transition()
+            .duration(100)
+            .style("opacity", matchObjectOffOpacity);
+        }
+
+        mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
+            .transition()
+            .duration(100)
+            .style("opacity", playerObjectOffOpacity);
+        
+        timeSvgTooltip.transition()
+            .duration(200)
+            .style("opacity", tooltipObjectOffOpacity);
+    }
+
+    function matchClick(d, i) {
+        const target = timeSvg.selectAll("circle")
+            .select(function(c) {
+                return c === d ? this : null;
+            })
+        
+        if(target.attr("class").includes("on")) {
+            unloadData(d["gameid"]);
+            target.attr("class", target.attr("class").replace(" on", ""));
+        }
+        else {
+            loadData(d["gameid"]);
+            target.attr("class", target.attr("class") + " on");
+        }
+    }
+
+    function convertExcelDateToJSDateTime(excelDate, offset) {
+        return new Date(Math.round((excelDate - 25569) * 86400 * 1000) + offset * 60 * 60 * 1000);
     }
 
     d3.select("input#grid-checkbox-b").on("change", function() {
