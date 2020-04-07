@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <!-- <script src="./assets/js/project.js"></script> -->
+  <script src="https://unpkg.com/d3-simple-slider"></script>
+  <link rel="stylesheet" type="text/css" href="./assets/css/map.css">
+  <title>InfoVis Project</title>
+</head>
+<body>
+  <div class="container">
+    <input type="button" id="load" class="button" value="Click me">
+  </div>
+  <script>
+    let data = d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/2019-worlds.csv");
+    console.log(data);
+
+    let games = [];
+    let uniqueId = [... new Set(games)];
+
+    d3.select("input#load")
+      .on("click", function() {
+        loadGames();
+        console.log(games);
+    });
+
+    function loadGames(){
+      while (games.length > 0){
+        games.pop();
+      }
+      console.log("hellooo!");
+      for (var i = 0; i < data.length; i++) {
+        console.log("hey!!!!");
+        if (data[i].week == "QF" || data[i].week == "SF" || data[i].week == "F"){
+          console.log("im doing something");
+          var newGameid = data[i].gameid;
+          games.push(newGameid);
+        }
+       }
+    }
+  </script>
+</body>
+</html>
