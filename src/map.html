@@ -190,26 +190,11 @@
     }
 
     function getIconPos(player) {
-        const targetP1 = [14, 32, 50, 68, 86];
-
-        const p = targetP1[(player["playerid"] - 1) % 5];
-        return getIntersection([[0, 0], [p, (100 - p)]], getLineB(player));
-    }
-
-    function getIconRad(player, blueTeam, redTeam) {
-        const pGold = player["totalgold"] - 0;
-        const bGold = blueTeam[0]["totalgold"] - 0;
-        const rGold = redTeam[0]["totalgold"] - 0;
-
-        return 20 * (pGold / (bGold + rGold));
-    }
-
-    function getLineB(player) {
         function getBase(side) {
             if(side == "Blue") {
-                return 45;
+                return 50;
             }
-            return 55;
+            return 50;
         }
 
         function getDirection(side) {
@@ -223,9 +208,24 @@
             return 2 * k + (-2) * d + 1 * a;
         }
 
-        const p = getBase(player["side"]) + getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
+        const offset = getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
+        
+        const p1 = offset > 0 ? 100 : 0;
 
-        return [[0, 2 * p], [2 * p, 0]];
+        const targetP2 = [14, 32, 50, 68, 86];
+        const p2 = targetP2[(player["playerid"] - 1) % 5];
+
+        const p = getBase(player["side"]) + offset;
+
+        return getIntersection([[p1, p1], [p2, (100 - p2)]], [[0, 2 * p], [2 * p, 0]]);
+    }
+
+    function getIconRad(player, blueTeam, redTeam) {
+        const pGold = player["totalgold"] - 0;
+        const bGold = blueTeam[0]["totalgold"] - 0;
+        const rGold = redTeam[0]["totalgold"] - 0;
+
+        return 20 * (pGold / (bGold + rGold));
     }
 
     function getIntersection(lineA, lineB) {
