@@ -58,6 +58,16 @@
         visualizePlayer(data);
     }
 
+    function unVisualize() {
+        mapSvg.selectAll("*").remove();
+        timeSvg.selectAll("*").remove();
+
+        mapSvg.append("image")
+            .attr("xlink:href", "./assets/images/minimap.png")
+            .attr("width", "100%")
+            .attr("height", "100%");
+    }
+
     function visualizeTeam(data) {
         const blueTeam = data.filter(d => d["side"] == "Blue");
         const redTeam = data.filter(d => d["side"] == "Red");
