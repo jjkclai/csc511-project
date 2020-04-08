@@ -52,6 +52,89 @@
         .attr("width", "100%")
         .attr("height", "100%");
 
+    function tokenizer(str) {
+        function isOperand(ch) {
+            return /\d|\w|\:/.test(ch);
+        }
+        function isOperatorSingle(ch) {
+            return /\!/.test(ch);
+        }
+        function isOperatorDouble(ch) {
+            return /\&|\|/.test(ch);
+        }
+        function isParenthesisLeft(ch) {
+            return (ch === "(");
+        }
+        function isParenthesisRight(ch) {
+            return (ch === ")");
+        }
+
+        let result = [];
+        let buffer = "";
+        let lastType = "";
+        let currType = "";
+
+        const strArray = str.replace(/\s+/g, "").split("");
+        for(let ch of strArray) {
+            if(isOperand(ch)) {
+                currType = "operand";
+            }
+            else if(isOperatorSingle(ch)) {
+                currType = "operatorSingle";
+            }
+            else if(isOperatorDouble(ch)) {
+                currType = "operatorDouble";
+            }
+            else if(isParenthesisLeft(ch)) {
+                currType = "parenthesisLeft";
+            }
+            else if(isParenthesisRight(ch)) {
+                currType = "parenthesisRight";
+            }
+
+            if(currType.includes("parenthesis")) {
+                if(lastType != "") {
+                    result.push({
+                        name: buffer,
+                        type: lastType
+                    });
+                }
+
+                result.push({
+                    name: ch,
+                    type: currType
+                });
+
+                buffer = "";
+                lastType = "";
+                continue;
+            }
+
+            if(currType == lastType || lastType == "") {
+                buffer += ch;
+                lastType = currType;
+            }
+            else if(currType != lastType){
+                result.push({
+                    name: buffer,
+                    type: lastType
+                });
+
+                buffer = ch;
+                lastType = currType;
+            }
+        };
+
+        if(lastType != "") {
+            result.push({
+                name: buffer,
+                type: lastType
+            });
+        }
+
+        return result;
+    }
+
     function loadData(targetId, isTeam, isPlayer) {
         const target = window.data.filter(d => d["gameid"] == targetId);
 
