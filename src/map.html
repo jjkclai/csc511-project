@@ -135,6 +135,56 @@
         return result;
     }
 
+    function parser(tokens) {
+        const associativity = {
+            "!": "right",
+            "&&" : "left",
+            "||" : "left"
+        };
+        const precedence = {
+            "!": "3",
+            "&&": "2",
+            "||": "1"
+        };
+
+        let result = [];
+        let opStack = [];
+
+        for(let token of tokens) {
+            if(token["type"] == "operand") {
+                result.push(token);
+                continue;
+            }
+            else if(token["type"].includes("operator")) {
+                while(opStack.length > 0) {
+                    let op = opStack.slice(-1)[0];
+                    if((associativity[token["name"]] == "left" && precedence[token["name"]] <= precedence[op["name"]]) || (associativity[token["name"]] == "right" && precedence[token["name"]] < precedence[op["name"]])) {
+                        result.push(opStack.pop());
+                    }
+                    else {
+                        break;
+                    }
+                }
+                opStack.push(token);
+            }
+            else if(token["type"] == "parenthesisLeft") {
+                opStack.push(token);
+            }
+            else if(token["type"] == "parenthesisRight") {
+                while(opStack.slice(-1)[0]["type"] != "parenthesisLeft") {
+                    result.push(opStack.pop());
+                }
+                opStack.pop();
+            }
+        }
+
+        while(opStack.length != 0) {
+            result.push(opStack.pop());
+        }
+
+        return result;
+    }
+
     function loadData(targetId, isTeam, isPlayer) {
         const target = window.data.filter(d => d["gameid"] == targetId);
 
