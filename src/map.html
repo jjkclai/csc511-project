@@ -238,6 +238,16 @@
         return result[0];
     }
 
+    function retriever(indices) {
+        let matches = window.data.filter((d, i) => indices[i]);
+
+        let gameidList = matches.map(d => d["gameid"]);
+
+        return window.data.filter(function(d) {
+            return gameidList.includes(d["gameid"]);
+        });
+    }
+
     function loadData(targetId, isTeam, isPlayer) {
         const target = window.data.filter(d => d["gameid"] == targetId);
 
