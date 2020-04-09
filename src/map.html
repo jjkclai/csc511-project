@@ -185,6 +185,59 @@
         return result;
     }
 
+    function calculator(tokens) {
+        function read(token) {
+            let target = token["name"].split(":");
+
+            return window.data.map(function(d) {
+                if(d[target[0]].toLowerCase().includes(target[1].toLowerCase())) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        function calculateSingle(operand, operator) {
+            if(operator["name"] == "!") {
+                return operand.map(function(d) {
+                    return !d;
+                });
+            }
+        }
+
+        function calculateDouble(operandA, operandB, operator) {
+            if(operator["name"] == "&&") {
+                return operandA.map(function(d, i) {
+                    return d && operandB[i];
+                });
+            }
+            else if(operator["name"] == "||") {
+                return operandA.map(function(d, i) {
+                    return d || operandB[i];
+                });
+            }
+        }
+
+        let result = [];
+
+        for(let token of tokens) {
+            if(token["type"] == "operand") {
+                result.push(read(token));
+            }
+            else if(token["type"] == "operatorSingle") {
+                let operand = result.pop();
+                result.push(calculateSingle(operand, token));
+            }
+            else if(token["type"] == "operatorDouble") {
+                let operandB = result.pop();
+                let operandA = result.pop();
+                result.push(calculateDouble(operandA, operandB, token));
+            }
+        }
+        
+        return result[0];
+    }
+
     function loadData(targetId, isTeam, isPlayer) {
         const target = window.data.filter(d => d["gameid"] == targetId);
 
