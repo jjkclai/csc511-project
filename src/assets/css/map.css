@@ -14,9 +14,12 @@
 
 #query-system-container {
     margin: 10px;
-    width: 20vw;
+    width: calc(90vw - min(77vw, 77vh));
     height: 50vh;
-    border: 1px;
+}
+
+#query-textbox {
+    width: 100%;
 }
 
 .svg {
