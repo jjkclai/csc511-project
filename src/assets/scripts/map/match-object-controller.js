@@ -28,7 +28,7 @@ function visualizeTimeLine(data) {
     let margin = width * 0.05;
 
     let xScale = d3.scaleTime()
-        .domain(d3.extent(schedule, function(d) {
+        .domain(d3.extent(window.data, function(d) {
             return d["date"];
         }))
         .range([margin, width - margin]);
@@ -39,9 +39,10 @@ function visualizeTimeLine(data) {
         .range([height - margin, margin]);
     
     let xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y-%m-%d"));
-    let yAxis = d3.axisLeft(yScale);
+    let yAxis = d3.axisLeft(yScale).tickValues(0);
 
-    let radius = (yScale(0) - yScale(1)) / 2;
+    let xLength = xScale(new Date("January 2, 2020")) - xScale(new Date("January 1, 2020"));
+    let yLength = yScale(0) - yScale(1);
 
     timeSvg.append("g")
         .call(xAxis)
@@ -52,10 +53,10 @@ function visualizeTimeLine(data) {
         .attr("transform", "translate(" + margin + ", 0)");
     
     timeSvg.append("g")
-        .selectAll("circle")
+        .selectAll("rect")
         .data(schedule)
         .enter()
-        .append("circle")
+        .append("rect")
             .attr("id", function(d) {
                 return d["gameid"];
             })
@@ -72,9 +73,10 @@ function visualizeTimeLine(data) {
                     return "red";
                 }
             })
-            .attr("cx", d => xScale(d["date"]) + radius)
-            .attr("cy", d => yScale(d["count"]) + radius)
-            .attr("r", radius)
+            .attr("x", d => xScale(d["date"]))
+            .attr("y", d => yScale(d["count"]))
+            .attr("width", xLength)
+            .attr("height", yLength)
             .on("mouseover", matchMouseOver)
             .on("mousemove", matchMouseMove)
             .on("mouseout", matchMouseOut)
@@ -82,7 +84,7 @@ function visualizeTimeLine(data) {
 }
 
 function matchMouseOver(d) {
-    timeSvg.selectAll("circle")
+    timeSvg.selectAll("rect")
         .select(function(c) {
             return c === d ? this : null;
         })
@@ -123,7 +125,7 @@ function matchMouseMove() {
 }
 
 function matchMouseOut(d) {
-    let target = timeSvg.selectAll("circle")
+    let target = timeSvg.selectAll("rect")
         .select(function(c) {
             return c === d ? this : null;
         })
@@ -170,7 +172,7 @@ function matchMouseOut(d) {
 }
 
 function matchClick(d) {
-    let target = timeSvg.selectAll("circle")
+    let target = timeSvg.selectAll("rect")
         .select(function(c) {
             return c === d ? this : null;
         })
