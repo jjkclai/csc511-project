@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <!-- <script src="./assets/scripts/project.js"></script> -->
+  <!-- <script src="./assets/js/project.js"></script> -->
   <script src="https://unpkg.com/d3-simple-slider"></script>
   <link rel="stylesheet" type="text/css" href="./assets/css/map.css">
   <title>InfoVis Project</title>
@@ -10,35 +10,138 @@
 <body>
   <div class="container">
     <input type="button" id="load" class="button" value="Click me">
+    <div id="showGames"></div>
+    <h2>Leag of Legends WC year:</h2>
+    <div class="row align-items-center">
+      <div class="col-sm-2"><p id="value-step"></p></div>
+      <div class="col-sm"><div id="slider-step"></div></div>
+    </div>
   </div>
   <script>
-    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/2019-worlds.csv").then(function(rows) {
+
+    let years = [2016,2017,2018,2019];
+    let year = 2018;
+
+    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/"+year+"-worlds.csv").then(function(rows) {
         window.data=rows;
     });
 
-    let games = [];
-    let uniqueId = [... new Set(games)];
+    function updateData(y) {
+      d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/"+y+"-worlds.csv").then(function(rows) {
+          window.data=rows;
+      });
+    }
 
-    d3.select("input#load")
+    let games = [];
+    let uniqueIds = [];
+    let gameID = "";
+
+    d3.select("#load")
       .on("click", function() {
         loadGames();
+        visualizeGames();
         console.log(games);
+        console.log(uniqueIds);
     });
 
     function loadGames(){
       while (games.length > 0){
         games.pop();
       }
-      console.log("hellooo!");
       for (var i = 0; i < data.length; i++) {
-        console.log("hey!!!!");
         if (data[i].week == "QF" || data[i].week == "SF" || data[i].week == "F"){
-          console.log("im doing something");
           var newGameid = data[i].gameid;
           games.push(newGameid);
         }
        }
+      uniqueIds = [... new Set(games)];
     }
+
+    var w = 900;
+    var h = 80;
+
+    var svgGames = d3.select("#showGames")
+          .append("svg")
+          .attr("width", w)
+          .attr("height", h);
+
+    function visualizeGames(){
+      var xScale = d3.scaleBand() //Ordinal scale
+           .domain(d3.range(uniqueIds.length)) //sets the input domain for the scale
+           .rangeRound([10, w-5]) //enables rounding of the range
+           .paddingInner(0.05); //spacing between each bar
+
+     svgGames.selectAll("rect")
+          .data(uniqueIds)
+          .enter()
+          .append("rect")
+          .attr("x", function(d, i) { // position in x-axis
+            return xScale(i); // we will pass the values from the dataset
+          })
+          .attr("y", 0)
+          .attr("width", xScale.bandwidth()) //Asks for the bandwith of the scale
+          .attr("height", h-20)
+          .attr("fill", "lightgray")
+          .on("mouseover", function(d){
+            d3.select(this)
+              .attr("fill", "red");
+
+            var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() / 2;
+            svgGames.append("text")
+              .attr("id", "tooltip")
+              .attr("x", xPosition)
+              .attr("y", h-5)
+              .attr("text-anchor", "middle")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "12px")
+              .attr("font-weight", "bold")
+              .attr("fill", "black")
+              .text(d);
+          })
+          .on("mouseout", function(){
+            d3.select(this)
+              .attr("fill", "lightgray");
+
+            d3.select("#tooltip").remove();
+          })
+          .on("click", function(d){
+            gameID = d;
+            console.log(gameID);
+          });
+    }
+
+      // Step
+    var sliderStep = d3
+      .sliderBottom()
+      .min(d3.min(years))
+      .max(d3.max(years))
+      .width(500)
+      .tickFormat(d3.format('0'))
+      .ticks(3)
+      .step(1)
+      .default(year)
+      .on('onchange', val => {
+        d3.select('p#value-step').text(val);
+        year = val;
+        console.log(year);
+        updateData(year);
+        loadGames();
+        visualizeGames();
+        console.log(games);
+        console.log(uniqueIds);
+      });
+
+    var gStep = d3
+      .select('div#slider-step')
+      .append('svg')
+      .attr('width', 600)
+      .attr('height', 100)
+      .append('g')
+      .attr('transform', 'translate(30,30)');
+
+    gStep.call(sliderStep);
+
+    d3.select('p#value-step').text(sliderStep.value());
   </script>
 </body>
 </html>
