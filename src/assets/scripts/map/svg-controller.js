@@ -15,6 +15,10 @@ function unloadMapData(targetId) {
     mapSvg.selectAll(".player-object").filter("._" + targetId).remove();
 }
 
+function clearTime() {
+    timeSvg.selectAll("*").remove();
+}
+
 function clearAll() {
     mapSvg.selectAll("*").remove();
     timeSvg.selectAll("*").remove();

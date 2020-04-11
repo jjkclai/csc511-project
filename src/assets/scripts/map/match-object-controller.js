@@ -25,18 +25,20 @@ function visualizeTimeLine(data) {
     
     let width = timeSvg.style("width").replace("px", "");
     let height = timeSvg.style("height").replace("px", "");
-    let margin = width * 0.05;
+
+    let xMargin = width * 0.05;
+    let yMargin = height * 0.10;
 
     let xScale = d3.scaleTime()
         .domain(d3.extent(window.data, function(d) {
             return d["date"];
         }))
-        .range([margin, width - margin]);
+        .range([xMargin, width - xMargin]);
     let yScale = d3.scaleLinear()
         .domain([0, d3.max(schedule, function(d) {
             return d["count"];
         })])
-        .range([height - margin, margin]);
+        .range([height - yMargin, yMargin]);
     
     let xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y-%m-%d"));
     let yAxis = d3.axisLeft(yScale).tickValues(0);
@@ -46,11 +48,11 @@ function visualizeTimeLine(data) {
 
     timeSvg.append("g")
         .call(xAxis)
-        .attr("transform", "translate(0, " + (height - margin) + ")");
+        .attr("transform", "translate(0, " + (height - yMargin) + ")");
 
     timeSvg.append("g")
         .call(yAxis)
-        .attr("transform", "translate(" + margin + ", 0)");
+        .attr("transform", "translate(" + xMargin + ", 0)");
     
     timeSvg.append("g")
         .selectAll("rect")

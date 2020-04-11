@@ -45,6 +45,11 @@
     window.timeSvg = d3.select("svg#time-svg");
     window.timeSvgTooltip = d3.select("div#time-svg-tooltip");
 
+    window.addEventListener("resize", function() {
+        clearTime();
+        visualizeTimeLine(data);
+    });
+
     mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")
         .attr("width", "100%")
