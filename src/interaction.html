@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <!-- <script src="./assets/js/project.js"></script> -->
   <script src="https://unpkg.com/d3-simple-slider"></script>
-  <link rel="stylesheet" type="text/css" href="./assets/css/map.css">
   <title>InfoVis Project</title>
 </head>
 <body>
@@ -20,7 +18,7 @@
   <script>
 
     let years = [2016,2017,2018,2019];
-    let year = 2018;
+    let year = 2016;
 
     d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/"+year+"-worlds.csv").then(function(rows) {
         window.data=rows;

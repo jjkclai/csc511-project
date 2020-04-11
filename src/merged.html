@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+
+    <script type="text/javascript" src="./assets/scripts/fixture2.js"></script>
+    <script src="./assets/scripts/map/constants.js"></script>
+    <script src="./assets/scripts/map/query-controller.js"></script>
+    <script src="./assets/scripts/map/settings-controller.js"></script>
+    <script src="./assets/scripts/map/svg-controller.js"></script>
+    <script src="./assets/scripts/map/match-object-controller.js"></script>
+    <script src="./assets/scripts/map/team-object-controller.js"></script>
+    <script src="./assets/scripts/map/player-object-controller.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/styles/map.css">
+</head>
+<body>
+    <div style="float: left">
+        <div id="map-svg-container" class="svg-container">
+            <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
+            <svg id="map-svg" class="svg"></svg>
+        </div>
+
+        <div id="time-svg-container" class="svg-container">
+            <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
+            <svg id="time-svg" class="svg"></svg>
+        </div>
+
+        <h2>Leag of Legends WC year:</h2>
+        <div class="row align-items-center">
+          <div class="col-sm-2"><p id="value-step"></p></div>
+          <div class="col-sm"><div id="slider-step"></div></div>
+        </div>
+    </div>
+
+    <div style="float:right">
+        <div id="query-system-container">
+            <input type="text" id="query-textbox" class="textbox">
+            <input type="button" id="query-submit-button" class="button" value="Submit">
+        </div>
+
+        <div id="map-options-container" class="options-container">
+            <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
+            <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
+        <div>
+    </div>
+
+<script>
+    let years = [2016,2017,2018,2019];
+    let year = 2018;
+
+    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/"+year+"-worlds.csv").then(function(rows) {
+      window.data=preprocess(rows);
+
+      visualizeTimeLine(data);
+    });
+
+    function updateData(y) {
+      d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/"+y+"-worlds.csv").then(function(rows) {
+        window.data=preprocess(rows);
+
+        visualizeTimeLine(data);
+      });
+    }
+
+    /// Slider to change dataset
+
+    var sliderStep = d3
+      .sliderBottom()
+      .min(d3.min(years))
+      .max(d3.max(years))
+      .width(500)
+      .tickFormat(d3.format('0'))
+      .ticks(3)
+      .step(1)
+      .default(year)
+      .on('onchange', val => {
+        d3.select('p#value-step').text(val);
+        year = val;
+        console.log(year);
+        clearAll(); //Clear de timeline and the map
+        updateData(year); //Change dataset
+        showFixture(year);
+      });
+
+    var gStep = d3
+      .select('div#slider-step')
+      .append('svg')
+      .attr('width', 600)
+      .attr('height', 100)
+      .append('g')
+      .attr('transform', 'translate(30,30)');
+
+    gStep.call(sliderStep);
+
+    d3.select('p#value-step').text(sliderStep.value());
+
+    //////////////////////////////////////*/
+
+    window.mapSvg = d3.select("svg#map-svg");
+    window.mapSvgTooltip = d3.select("div#map-svg-tooltip");
+
+    window.timeSvg = d3.select("svg#time-svg");
+    window.timeSvgTooltip = d3.select("div#time-svg-tooltip");
+
+    mapSvg.append("image")
+        .attr("xlink:href", "./assets/images/minimap.png")
+        .attr("width", "100%")
+        .attr("height", "100%");
+
+    d3.select("input#query-submit-button").on("click", function() {
+        parseQuery(document.getElementById("query-textbox").value);
+    });
+
+    d3.select("input#grid-checkbox-b").on("change", function() {
+        gridUpdate("b");
+    });
+
+    d3.select("input#grid-checkbox-r").on("change", function() {
+        gridUpdate("r");
+    });
+
+    function preprocess(data) {
+        function convertExcelDateToJSDateTime(excelDate, offset) {
+            return new Date(Math.round((excelDate - 25569) * 86400 * 1000) + offset * 60 * 60 * 1000);
+        }
+
+        return data.map(function(d) {
+            d["datetime"] = convertExcelDateToJSDateTime(d["date"], 6);
+            d["date"] = new Date(d["datetime"].toDateString());
+            return d;
+        });
+    }
+</script>
+</body>
+</html>
