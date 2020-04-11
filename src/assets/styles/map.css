@@ -1,25 +1,69 @@
-.svg-container {
-    margin: 10px;
-}
-
 #map-svg-container {
-    width: min(77vw, 77vh);
-    height: min(77vw, 77vh);
+    position: fixed;
+    width: calc(min(80vw, 80vh) - 10px);
+    height: calc(min(80vw, 80vh) - 10px);
+    top: 5px;
+    left: 5px;
 }
 
 #time-svg-container {
-    width: min(77vw, 77vh);
-    height: 20vh;
+    position: fixed;
+    width: calc(100vw - 10px);
+    height: calc(100vh - min(80vw, 80vh) - 5px);
+    top: min(80vw, 80vh);
+    left: 5px;
 }
 
 #query-system-container {
-    margin: 10px;
-    width: calc(90vw - min(77vw, 77vh));
-    height: 50vh;
+    position: fixed;
+    width: calc(100vw - min(80vw, 80vh) - 5px);
+    height: calc(min(80vw, 80vh) / 2 - 5px);
+    top: 5px;
+    left: min(80vw, 80vh);
 }
 
-#query-textbox {
+#settings-container {
+    position: fixed;
+    width: calc(100vw - min(80vw, 80vh) - 5px);
+    height: calc(min(80vw, 80vh) / 2 - 5px);
+    top: calc(min(80vw, 80vh) / 2);
+    left: min(80vw, 80vh);
+}
+
+@media only screen and (max-width:620px) {
+    #map-svg-container {
+        width: calc(100vw - 10px);
+        height: calc(100vw - 10px);
+        top: 5px;
+        left: 5px;
+    }
+
+    #time-svg-container {
+        width: calc(100vw - 10px);
+        height: calc(100vh * 0.2 - 5px);
+        top: 100vw;
+        left: 5px;
+    }
+    
+    #query-system-container {
+        width: calc(100vw - 10px);
+        height: calc(100vh * 0.1 - 5px);
+        top: calc(100vw + 100vh * 0.2);
+        left: 5px;
+    }
+    
+    #settings-container {
+        width: calc(100vw - 10px);
+        height: calc(100vh * 0.1);
+        top: calc(100vw + 100vh * 0.3);
+        left: 5px;
+    }
+}
+
+.textbox {
+    box-sizing: border-box;
     width: 100%;
+    height: 70%;
 }
 
 .svg {
