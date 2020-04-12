@@ -49,14 +49,16 @@ function loadFixtures(i) {
    "img": data[i].Champion_flag,
    "score": data[i].Score_Champion,
    "level": "A",
+   "matchDate":data[i].final_Date,
 
    "children": [{
-    // "name": data[i].Champion,
+     "name": data[i].Champion,
     "img": data[i].Champion_flag,
     "score": data[i].Score_SemiC,
     "stroke_color": "#55AE3A",
     "Stroke_width": "4px",
-	"level": "B",
+	"level": "B1",
+	"matchDate":data[i].semifinal_Date_C,
 
     "children": [{
      "name": data[i].Champion,
@@ -64,7 +66,8 @@ function loadFixtures(i) {
      "score": data[i].Score_SemiC,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
-	 "level": "C",
+	 "level": "C1",
+	 "matchDate":data[i].Q_R1_date,
 	 
       "children": [{
 	"name": data[i].Q_R1_C,
@@ -86,7 +89,10 @@ function loadFixtures(i) {
      "img": data[i].Semifinal_withC_flag,
      "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
-	 "level": "C",
+	 "level": "C2",
+	 "matchDate":data[i].Q_R2_date,
+
+	 
 	 
 	       "children": [{
 	"name": data[i].Q_R2_C,
@@ -105,12 +111,14 @@ function loadFixtures(i) {
     }]
 
    }, {
-    // "name": data[i].Runner_Up,
+    "name": data[i].Runner_Up,
     "score": data[i].Score_RunnerUp,
     "img": data[i].RunnerUp_flag,
     "stroke_color": "#8da0cb",
     "Stroke_width": "3px",
-	"level": "B",
+	"level": "B2",
+	"matchDate":data[i].semifinal_Date_R,
+
 
     "children": [{
      "name": data[i].Runner_Up,
@@ -118,7 +126,8 @@ function loadFixtures(i) {
      "img": data[i].RunnerUp_flag,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
-	 "level": "C",
+	 "level": "C3",
+	 "matchDate":data[i].Q_R3_date,
 	 
 	 "children": [{
 	"name": data[i].Q_R3_C,
@@ -140,7 +149,9 @@ function loadFixtures(i) {
      "img": data[i].Semifinal_withR_flag,
      "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
-	 "level": "C",
+	 "level": "C4",
+	 "matchDate":data[i].Q_R4_date,
+
 	 
 	       "children": [{
 	"name": data[i].Q_R4_C,
@@ -275,7 +286,13 @@ function fixture() {
 
  var setEvents = images
   .on('click', function(d) {
-	  console.log(d.data.level)
+	  
+	 console.log(d.data.level);
+	 var team = (d.data.name);
+	 console.log(team);
+	 var matchdate = (d.data.matchDate);
+	 console.log(matchdate);
+
   })
 
   .on('mouseenter', function() {
@@ -306,3 +323,5 @@ function fixture() {
   });
 
 }
+
+
