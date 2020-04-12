@@ -18,11 +18,13 @@ ul.championship_year {
   padding: 0;
   overflow: hidden;
   background-color: #333;
+  width:40%;
+  display:inline-block;
 }
 
  ul.championship_year li {
   float: left;
-  width:11.11%;
+  width:25%;
 }
 
 .year_2015 a,.year_2014 a,.year_2013 a,.year_2012 a,.year_2011 a{
@@ -36,7 +38,8 @@ ul.championship_year li a:hover{
 }
 
 svg{
-	margin-left:200px;
+	display: block;
+    margin: -30px auto;
 }
 .node circle {
     fill: #fff;
@@ -45,7 +48,7 @@ svg{
 }
 
 .container{
-	padding:40px;
+	padding:30px;
 }
 
 text{
