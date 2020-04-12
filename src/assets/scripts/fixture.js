@@ -41,34 +41,66 @@ function year_click(clicked_id) {
 //function for yearly Fixture 
 function loadFixtures(i) {
  //console.log(i);
- d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/Lol_worldChampionship.csv").then(function(data) {
+
+ d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/Lol_worldChampionshipMain.csv").then(function(data) {
   //console.log(data[8].Year); 
   fixture_data = {
    "name": data[i].Champion,
    "img": data[i].Champion_flag,
    "score": data[i].Score_Champion,
+   "level": "A",
 
    "children": [{
     // "name": data[i].Champion,
     "img": data[i].Champion_flag,
     "score": data[i].Score_SemiC,
-    "level": "#55AE3A",
+    "stroke_color": "#55AE3A",
     "Stroke_width": "4px",
+	"level": "B",
 
     "children": [{
      "name": data[i].Champion,
      "img": data[i].Champion_flag,
      "score": data[i].Score_SemiC,
-     "level": "#55AE3A",
+     "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
-
+	 "level": "C",
+	 
+      "children": [{
+	"name": data[i].Q_R1_C,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R1_C_Score,
+     "stroke_color": "#55AE3A",
+     "Stroke_width": "4px",
+	  },{
+	 "name": data[i].Q_R1_R,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R1_R_Score,
+	 "stroke_color": "#8da0cb",
+     "Stroke_width": "3px",
+	  }]
 
     }, {
      "name": data[i].Semifinal_withC,
      "score": data[i].Score_Semifinal_withC,
      "img": data[i].Semifinal_withC_flag,
-     "level": "#8da0cb",
+     "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
+	 "level": "C",
+	 
+	       "children": [{
+	"name": data[i].Q_R2_C,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R2_C_Score,
+     "stroke_color": "#55AE3A",
+     "Stroke_width": "4px",
+	  },{
+	 "name": data[i].Q_R2_R,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R2_R_Score,
+	 "stroke_color": "#8da0cb",
+     "Stroke_width": "3px",
+	  }]
 
     }]
 
@@ -76,22 +108,53 @@ function loadFixtures(i) {
     // "name": data[i].Runner_Up,
     "score": data[i].Score_RunnerUp,
     "img": data[i].RunnerUp_flag,
-    "level": "#8da0cb",
+    "stroke_color": "#8da0cb",
     "Stroke_width": "3px",
+	"level": "B",
 
     "children": [{
      "name": data[i].Runner_Up,
      "score": data[i].Score_SemiR,
      "img": data[i].RunnerUp_flag,
-     "level": "#55AE3A",
+     "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
+	 "level": "C",
+	 
+	 "children": [{
+	"name": data[i].Q_R3_C,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R3_C_Score,
+     "stroke_color": "#55AE3A",
+     "Stroke_width": "4px",
+	  },{
+	 "name": data[i].Q_R3_R,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R3_R_Score,
+	 "stroke_color": "#8da0cb",
+     "Stroke_width": "3px",
+	  }]
 
     }, {
      "name": data[i].Semifinal_withR,
      "score": data[i].Score_Semifinal_withR,
      "img": data[i].Semifinal_withR_flag,
-     "level": "#8da0cb",
+     "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
+	 "level": "C",
+	 
+	       "children": [{
+	"name": data[i].Q_R4_C,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R4_C_Score,
+     "stroke_color": "#55AE3A",
+     "Stroke_width": "4px",
+	  },{
+	 "name": data[i].Q_R4_R,
+     //"img": data[i].Champion_flag,
+     "score": data[i].Q_R4_R_Score,
+	 "stroke_color": "#8da0cb",
+     "Stroke_width": "3px",
+	  }]
 
 
     }]
@@ -107,12 +170,12 @@ function fixture() {
 
  // set the dimensions and margins of the diagram
  //var margin = {top: 20, right: 90, bottom: 30, left: 90},
- var width = 700,
-  height = 500;
+ var width = 900,
+  height = 580;
 
  // declares a tree layout and assigns the size
  var treemap = d3.tree()
-  .size([height, width - 250]);
+  .size([height, width - 200]);
 
  //  assigns the data to a hierarchy using parent-child relationships
  var nodes = d3.hierarchy(fixture_data, function(d) {
@@ -129,7 +192,7 @@ function fixture() {
   .attr("width", width)
   .attr("height", height)
  g = svg.append("g")
-  .attr("transform", "translate(40,-40)");
+  .attr("transform", "translate(40,-27)");
 
 
  // adds the links between the nodes
@@ -146,7 +209,7 @@ function fixture() {
    return d.data.Stroke_width;
   })
   .style("stroke", function(d) {
-   return d.data.level;
+   return d.data.stroke_color;
   })
   .attr("d", function(d) {
    return "M" + d.y + "," + d.x +
@@ -185,7 +248,7 @@ function fixture() {
 
  //add node circle 
  node.append("circle")
-  .attr("r", 30)
+  .attr("r", 20)
   .style("stroke", "#e41a1c");
 
  //add text to the node
@@ -202,17 +265,17 @@ function fixture() {
    return d.data.img;
   })
   .attr("x", function(d) {
-   return -25;
+   return -18;
   })
   .attr("y", function(d) {
-   return -25;
+   return -18;
   })
-  .attr("height", 50)
-  .attr("width", 50);
+  .attr("height", 36)
+  .attr("width", 36);
 
  var setEvents = images
   .on('click', function(d) {
-   //show match details
+	  console.log(d.data.level)
   })
 
   .on('mouseenter', function() {
@@ -220,26 +283,26 @@ function fixture() {
    d3.select(this)
     .transition()
     .attr("x", function(d) {
-     return -35;
+     return -30;
     })
     .attr("y", function(d) {
-     return -35;
+     return -30;
     })
-    .attr("height", 80)
-    .attr("width", 80);
+    .attr("height", 60)
+    .attr("width", 60);
   })
   // set back
   .on('mouseleave', function() {
    d3.select(this)
     .transition()
     .attr("x", function(d) {
-     return -25;
+     return -18;
     })
     .attr("y", function(d) {
-     return -25;
+     return -18;
     })
-    .attr("height", 50)
-    .attr("width", 50);
+    .attr("height", 36)
+    .attr("width", 36);
   });
 
 }
