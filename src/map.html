@@ -25,6 +25,7 @@
     <div id="query-system-container">
         <input type="text" id="query-textbox" class="textbox">
         <input type="button" id="query-submit-button" class="button" value="Submit">
+        <input type="button" id="query-clear-button" class="button" value="Clear">
     </div>
 
     <div id="settings-container">
@@ -56,6 +57,11 @@
         .attr("height", "100%");
     
     d3.select("input#query-submit-button").on("click", function() {
+        parseQuery(document.getElementById("query-textbox").value);
+    });
+
+    d3.select("input#query-clear-button").on("click", function() {
+        document.getElementById("query-textbox").value = "";
         parseQuery(document.getElementById("query-textbox").value);
     });
 

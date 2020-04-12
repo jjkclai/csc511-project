@@ -1,8 +1,16 @@
 function parseQuery(query) {
-    let infix = tokenizer(query);
-    let postfix = parser(infix);
-    let indices = calculator(postfix);
-    let result = retriever(indices);
+    let result;
+
+    if(query.length == 0) {
+        result = window.data;
+    }
+    else {
+        let infix = tokenizer(query);
+        let postfix = parser(infix);
+        let indices = calculator(postfix);
+
+        result = retriever(indices);
+    }
     
     clearAll();
     visualizeTimeLine(result);
