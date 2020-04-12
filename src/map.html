@@ -74,7 +74,8 @@
 
         data = data.map(function(d) {
             d["datetime"] = convertExcelDateToJSDateTime(d["date"], 6);
-            d["date"] = new Date(d["datetime"].toDateString());
+            d["date_"] = new Date(d["datetime"].toDateString());
+            d["date"] = d["datetime"].toDateString().replace(/\s+/g, "-");
             return d;
         });
 
@@ -93,14 +94,14 @@
         gameidTable = {};
         countTable = {};
         partial.forEach(function(d) {
-            if(d["date"] in countTable) {
-                countTable[d["date"]]++;
+            if(d["date_"] in countTable) {
+                countTable[d["date_"]]++;
             }
             else {
-                countTable[d["date"]] = 1;
+                countTable[d["date_"]] = 1;
             }
 
-            gameidTable[d["gameid"]] = countTable[d["date"]];
+            gameidTable[d["gameid"]] = countTable[d["date_"]];
         });
 
         data = data.map(function(d) {
