@@ -1,5 +1,4 @@
 #map-svg-container {
-    position: fixed;
     width: calc(min(80vw, 80vh) - 10px);
     height: calc(min(80vw, 80vh) - 10px);
     top: 5px;
@@ -7,7 +6,6 @@
 }
 
 #time-svg-container {
-    position: fixed;
     width: calc(100vw - 10px);
     height: calc(100vh - min(80vw, 80vh) - 5px);
     top: min(80vw, 80vh);
