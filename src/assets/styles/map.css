@@ -1,5 +1,5 @@
 #map-svg-container {
-    position: fixed;
+    /*position: fixed;*/
     width: calc(min(80vw, 80vh) - 10px);
     height: calc(min(80vw, 80vh) - 10px);
     top: 5px;
@@ -7,7 +7,7 @@
 }
 
 #time-svg-container {
-    position: fixed;
+    /*position: fixed;*/
     width: calc(100vw - 10px);
     height: calc(100vh - min(80vw, 80vh) - 5px);
     top: min(80vw, 80vh);
@@ -44,14 +44,14 @@
         top: 100vw;
         left: 5px;
     }
-    
+
     #query-system-container {
         width: calc(100vw - 10px);
         height: calc(100vh * 0.1 - 5px);
         top: calc(100vw + 100vh * 0.2);
         left: 5px;
     }
-    
+
     #settings-container {
         width: calc(100vw - 10px);
         height: calc(100vh * 0.1);
@@ -92,7 +92,7 @@
     padding: 10px;
     font: 15px sans-serif;
     border: 0px;
-    border-radius: 8px;	
+    border-radius: 8px;
     pointer-events: none;
 }
 

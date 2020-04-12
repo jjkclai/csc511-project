@@ -15,36 +15,33 @@
     <link rel="stylesheet" type="text/css" href="./assets/styles/map.css">
 </head>
 <body>
-    <div style="float: left">
-        <div id="map-svg-container" class="svg-container">
-            <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
-            <svg id="map-svg" class="svg"></svg>
-        </div>
-
-        <div id="time-svg-container" class="svg-container">
-            <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
-            <svg id="time-svg" class="svg"></svg>
-        </div>
-
-        <h2>Leag of Legends WC year:</h2>
-        <div class="row align-items-center">
-          <div class="col-sm-2"><p id="value-step"></p></div>
-          <div class="col-sm"><div id="slider-step"></div></div>
-        </div>
+  <div class="container">
+    <div id="map-svg-container" class="svg-container">
+        <div id="map-svg-tooltip" class="tooltip" style="opacity:0"></div>
+        <svg id="map-svg" class="svg"></svg>
     </div>
 
-    <div style="float:right">
-        <div id="query-system-container">
-            <input type="text" id="query-textbox" class="textbox">
-            <input type="button" id="query-submit-button" class="button" value="Submit">
-        </div>
-
-        <div id="map-options-container" class="options-container">
-            <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
-            <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
-        <div>
+    <div id="time-svg-container" class="svg-container">
+        <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
+        <svg id="time-svg" class="svg"></svg>
     </div>
 
+    <div id="query-system-container">
+        <input type="text" id="query-textbox" class="textbox">
+        <input type="button" id="query-submit-button" class="button" value="Submit">
+    </div>
+
+    <div id="settings-container">
+        <input type="checkbox" id="grid-checkbox-b" class="checkbox"><label>Show Blue-side Grid</label>
+        <input type="checkbox" id="grid-checkbox-r" class="checkbox"><label>Show Red-side Grid</label>
+    <div>
+
+    <h2>Leag of Legends WC year:</h2>
+    <div class="row align-items-center">
+      <div class="col-sm-2"><p id="value-step"></p></div>
+      <div class="col-sm"><div id="slider-step"></div></div>
+    </div>
+  </div>
 <script>
     let years = [2016,2017,2018,2019];
     let year = 2018;
@@ -102,6 +99,11 @@
 
     window.timeSvg = d3.select("svg#time-svg");
     window.timeSvgTooltip = d3.select("div#time-svg-tooltip");
+
+    window.addEventListener("resize", function() {
+        clearTime();
+        visualizeTimeLine(data);
+    });
 
     mapSvg.append("image")
         .attr("xlink:href", "./assets/images/minimap.png")
