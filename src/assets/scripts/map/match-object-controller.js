@@ -26,35 +26,85 @@ function visualizeTimeLine(data) {
     let width = timeSvg.style("width").replace("px", "");
     let height = timeSvg.style("height").replace("px", "");
 
-    let xMargin = width * 0.05;
-    let yMargin = height * 0.10;
+    let marginFocus = {top: height * 0.10, right: width * 0.05, bottom: height * 0.40, left: width * 0.05};
+    let marginContext = {top: height * 0.80, right: width * 0.05, bottom: height * 0.10, left: width * 0.05};
 
-    let xScale = d3.scaleTime()
-        .domain(d3.extent(window.data, function(d) {
-            return d["date"];
-        }))
-        .range([xMargin, width - xMargin]);
-    let yScale = d3.scaleLinear()
+    let widthFocus = width - marginFocus.right - marginFocus.left;
+    let heightFocus = height - marginFocus.top - marginFocus.bottom;
+
+    let widthContext = width - marginContext.right - marginContext.left;
+    let heightContext = height - marginContext.top - marginContext.bottom;
+
+    let svgFocus = timeSvg.append("g")
+        .attr("class", "focus")
+        .attr("transform", "translate(" + marginFocus.left + ", " + marginFocus.top + ")");
+    
+    let svgContext = timeSvg.append("g")
+        .attr("class", "context")
+        .attr("transform", "translate(" + marginContext.left + ", " + marginContext.top + ")");
+
+    let xScaleFocus = d3.scaleTime()
+        .range([0, widthFocus])
+        .domain([
+            d3.min(schedule, function(d) {
+                return d["date"];
+            }),
+            d3.max(schedule, function(d) {
+                return d["date"];
+            })
+        ]);
+
+    let yScaleFocus = d3.scaleLinear()
+        .range([heightFocus, 0])
         .domain([0, d3.max(schedule, function(d) {
             return d["count"];
-        })])
-        .range([height - yMargin, yMargin]);
+        })]);
+
+    let xScaleContext = d3.scaleTime()
+        .range(xScaleFocus.range())
+        .domain(xScaleFocus.domain());
+
+    let yScaleContext = d3.scaleLinear()
+        .range([heightContext, 0])
+        .domain([0, d3.max(schedule, function(d) {
+            return d["count"];
+        })]);
+
+    let brush = d3.brushX()
+        .extent([[0, 0], [widthContext, heightContext]])
+        .on("brush end", brushed);
     
-    let xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y-%m-%d"));
-    let yAxis = d3.axisLeft(yScale).tickValues(0);
+    let xAxisFocus = d3.axisBottom(xScaleFocus);
+    let yAxisFocus = d3.axisLeft(yScaleFocus);
 
-    let xLength = xScale(new Date("January 2, 2020")) - xScale(new Date("January 1, 2020"));
-    let yLength = yScale(0) - yScale(1);
+    let xAxisContext = d3.axisBottom(xScaleContext);
 
-    timeSvg.append("g")
-        .call(xAxis)
-        .attr("transform", "translate(0, " + (height - yMargin) + ")");
+    svgFocus.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0, " + heightFocus + ")")
+        .call(xAxisFocus);
 
-    timeSvg.append("g")
-        .call(yAxis)
-        .attr("transform", "translate(" + xMargin + ", 0)");
-    
-    timeSvg.append("g")
+    svgFocus.append("g")
+        .attr("class", "y-axis")
+        .attr("transform", "translate(0, 0)")
+        .call(yAxisFocus);
+
+    svgContext.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0, " + heightContext + ")")
+        .call(xAxisContext);
+
+    svgContext.append("g")
+        .attr("class", "brush")
+        .call(brush)
+        .selectAll("rect")
+            .attr("y", -10)
+            .attr("height", heightContext + 15);
+
+    let xLengthFocus = xScaleFocus(new Date("January 2, 2020")) - xScaleFocus(new Date("January 1, 2020"));
+    let yLengthFocus = yScaleFocus(0) - yScaleFocus(1);
+
+    svgFocus.append("g")
         .selectAll("rect")
         .data(schedule)
         .enter()
@@ -75,14 +125,58 @@ function visualizeTimeLine(data) {
                     return "red";
                 }
             })
-            .attr("x", d => xScale(d["date"]))
-            .attr("y", d => yScale(d["count"]))
-            .attr("width", xLength)
-            .attr("height", yLength)
+            .attr("x", d => xScaleFocus(d["date"]))
+            .attr("y", d => yScaleFocus(d["count"]))
+            .attr("width", xLengthFocus)
+            .attr("height", yLengthFocus)
             .on("mouseover", matchMouseOver)
             .on("mousemove", matchMouseMove)
             .on("mouseout", matchMouseOut)
             .on("click", matchClick);
+    
+    let xLengthContext = xScaleContext(new Date("January 2, 2020")) - xScaleContext(new Date("January 1, 2020"));
+    let yLengthContext = yScaleContext(0) - yScaleContext(1);
+
+    svgContext.append("g")
+        .selectAll("rect")
+        .data(schedule)
+        .enter()
+        .append("rect")
+            .style("opacity", matchObjectOffOpacity)
+            .style("stroke", "black")
+            .style("fill", function(d) {
+                if(d["result"] == "1") {
+                    return "blue";
+                }
+                else {
+                    return "red";
+                }
+            })
+            .attr("x", d => xScaleContext(d["date"]))
+            .attr("y", d => yScaleContext(d["count"]))
+            .attr("width", xLengthContext)
+            .attr("height", yLengthContext)
+
+    function brushed() {
+        let extent = d3.event.selection;
+
+        xScaleFocus.domain((extent === null) ? xScaleContext.domain() : d3.event.selection);
+
+        if(extent === null) {
+            xScaleFocus.domain(xScaleContext.domain());
+        }
+        else {
+            xScaleFocus.domain(extent.map(xScaleContext.invert, xScaleContext));
+        }
+
+        xLengthFocus = xScaleFocus(new Date("January 2, 2020")) - xScaleFocus(new Date("January 1, 2020"));
+
+        svgFocus.select(".x-axis").call(xAxisFocus);
+
+        svgFocus.selectAll("rect")
+            .attr("x", d => xScaleFocus(d["date"]))
+            .attr("width", xLengthFocus);
+    }
 }
 
 function matchMouseOver(d) {
