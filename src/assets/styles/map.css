@@ -1,36 +1,36 @@
 #map-svg-container {
     position: fixed;
-    width: calc(min(80vw, 80vh) - 10px);
-    height: calc(min(80vw, 80vh) - 10px);
+    width: calc(100vh - 10px);
+    height: calc(100vh - 10px);
     top: 5px;
     left: 5px;
 }
 
 #time-svg-container {
     position: fixed;
-    width: calc(100vw - 10px);
-    height: calc(100vh - min(80vw, 80vh) - 5px);
-    top: min(80vw, 80vh);
-    left: 5px;
+    width: calc(100vw - 100vh - 5px);
+    height: calc(40vh - 10px);
+    top: calc(60vh + 5px);
+    left: 100vh;
 }
 
 #query-system-container {
     position: fixed;
-    width: calc(100vw - min(80vw, 80vh) - 5px);
-    height: calc(min(80vw, 80vh) / 2 - 5px);
+    width: calc(100vw - 100vh - 5px);
+    height: calc(30vh - 10px);
     top: 5px;
-    left: min(80vw, 80vh);
+    left: 100vh;
 }
 
 #settings-container {
     position: fixed;
-    width: calc(100vw - min(80vw, 80vh) - 5px);
-    height: calc(min(80vw, 80vh) / 2 - 5px);
-    top: calc(min(80vw, 80vh) / 2);
-    left: min(80vw, 80vh);
+    width: calc(100vw - 100vh - 5px);
+    height: calc(30vh - 10px);
+    top: calc(30vh + 5px);
+    left: 100vh;
 }
 
-@media only screen and (max-width:620px) {
+@media all and (orientation: portrait) {
     #map-svg-container {
         width: calc(100vw - 10px);
         height: calc(100vw - 10px);
