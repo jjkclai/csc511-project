@@ -1,27 +1,5 @@
 function visualizeTimeLine(data) {
     let schedule = data.filter(d => d["playerid"] == "1");
-
-    schedule.sort(function(a, b) {
-        if(a["datetime"] > b["datetime"]) {
-            return 1;
-        }
-        else if(a["datetime"] < b["datetime"]) {
-            return -1;
-        }
-        return 0;
-    });
-
-    scheduleHash = {};
-    schedule.forEach(function(d) {
-        if(d["date"] in scheduleHash) {
-            scheduleHash[d["date"]]++;
-        }
-        else {
-            scheduleHash[d["date"]] = 1;
-        }
-
-        d["count"] = scheduleHash[d["date"]];
-    });
     
     let width = timeSvg.style("width").replace("px", "");
     let height = timeSvg.style("height").replace("px", "");
