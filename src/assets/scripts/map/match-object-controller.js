@@ -85,11 +85,21 @@ function visualizeHistory(data) {
         .selectAll("rect")
             .attr("y", -10)
             .attr("height", heightContext + 15);
+    
+    let clipFocus = timeSvg.append("defs").append("clipPath")
+        .attr("id", "clip-focus")
+        .append("rect")
+            .attr("width", widthFocus)
+            .attr("height", heightFocus);
+    
+    var clipChartFocus = svgFocus.append("g")
+        .attr("transform", "translate(" + 0 + "," + 0 + ")")
+        .attr("clip-path", "url(#clip-focus)");
 
     let xLengthFocus = xScaleFocus(new Date("January 2, 2020")) - xScaleFocus(new Date("January 1, 2020"));
     let yLengthFocus = yScaleFocus(0) - yScaleFocus(1);
 
-    svgFocus.append("g")
+    clipChartFocus.append("g")
         .selectAll("rect")
         .data(schedule)
         .enter()
