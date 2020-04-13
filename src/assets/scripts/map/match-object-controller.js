@@ -25,10 +25,10 @@ function visualizeTimeLine(data) {
         .range([0, widthFocus])
         .domain([
             d3.min(schedule, function(d) {
-                return d["date_"];
+                return new Date(d["date_"].getTime()).setDate(d["date_"].getDate() - 1);
             }),
             d3.max(schedule, function(d) {
-                return d["date_"];
+                return new Date(d["date_"].getTime()).setDate(d["date_"].getDate() + 1);
             })
         ]);
 
@@ -42,10 +42,10 @@ function visualizeTimeLine(data) {
         .range(xScaleFocus.range())
         .domain([
             d3.min(window.data, function(d) {
-                return d["date_"];
+                return new Date(d["date_"].getTime()).setDate(d["date_"].getDate() - 1);
             }),
             d3.max(window.data, function(d) {
-                return d["date_"];
+                return new Date(d["date_"].getTime()).setDate(d["date_"].getDate() + 1);
             })
         ]);
 
@@ -110,7 +110,7 @@ function visualizeTimeLine(data) {
                     return "red";
                 }
             })
-            .attr("x", d => xScaleFocus(d["date_"]))
+            .attr("x", d => xScaleFocus(d["date_"]) - xLengthFocus / 2)
             .attr("y", d => yScaleFocus(d["count"]))
             .attr("width", xLengthFocus)
             .attr("height", yLengthFocus)
@@ -137,7 +137,7 @@ function visualizeTimeLine(data) {
                     return "red";
                 }
             })
-            .attr("x", d => xScaleContext(d["date_"]))
+            .attr("x", d => xScaleContext(d["date_"]) - xLengthContext / 2)
             .attr("y", d => yScaleContext(d["count"]))
             .attr("width", xLengthContext)
             .attr("height", yLengthContext)
@@ -159,7 +159,7 @@ function visualizeTimeLine(data) {
         svgFocus.select(".x-axis").call(xAxisFocus);
 
         svgFocus.selectAll("rect")
-            .attr("x", d => xScaleFocus(d["date_"]))
+            .attr("x", d => xScaleFocus(d["date_"]) - xLengthFocus / 2)
             .attr("width", xLengthFocus);
     }
 }
