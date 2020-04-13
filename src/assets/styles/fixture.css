@@ -40,6 +40,7 @@ ul.championship_year li a:hover{
 svg{
 	display: block;
     margin: -30px auto;
+	margin-top: -100px;
 }
 .node circle {
     fill: #fff;
@@ -56,9 +57,16 @@ text{
 	font-weight:700;
 }
 
+.heading{
+	font-size:30px;
+	background-color:#e5f5f9;
+	color:#2ca25f;
+	font-family:"Comic Sans MS";
 
+}
 
-
-
-
-
+.sub-heading{
+	font-size:18px;
+	color:#2ca25f;
+	font-family:"Comic Sans MS";
+}
