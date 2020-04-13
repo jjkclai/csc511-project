@@ -5,10 +5,10 @@ function visualizePlayer(data) {
 
     players.sort(function(a, b) {
         if(a["totalgold"] > b["totalgold"]) {
-            return 1;
+            return -1;
         }
         else if(a["totalgold"] < b["totalgold"]) {
-            return -1;
+            return 1;
         }
         return 0;
     });
