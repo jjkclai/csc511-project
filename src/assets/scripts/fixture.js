@@ -286,13 +286,11 @@ function fixture() {
 
  var setEvents = images
   .on('click', function(d) {
-	  
-	 console.log(d.data.level);
-	 var team = (d.data.name);
-	 console.log(team);
-	 var matchdate = (d.data.matchDate);
-	 console.log(matchdate);
+	 var team = d.data.name.split(" ")[0];
+	 var date = new Date(d.data.matchDate).toDateString().replace(/\s+/g, "-");
+   localStorage.setItem("query", "team: " + team + " && " + "date: " + date);
 
+   window.open("./map.html", "_self");
   })
 
   .on('mouseenter', function() {

@@ -56,6 +56,9 @@
         .attr("width", "100%")
         .attr("height", "100%");
     
+    document.getElementById("query-textbox").value = localStorage.getItem("query");
+    localStorage.setItem("query", " ");
+    
     d3.select("input#query-submit-button").on("click", function() {
         parseQuery(document.getElementById("query-textbox").value);
     });
