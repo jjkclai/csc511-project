@@ -1,4 +1,4 @@
-function visualizeTimeLine(data) {
+function visualizeHistory(data) {
     let schedule = data.filter(d => d["playerid"] == "1");
     
     let width = timeSvg.style("width").replace("px", "");
@@ -180,6 +180,9 @@ function matchMouseOver(d) {
         .duration(100)
         .style("opacity", playerObjectOnOpacity);
 
+    clearTimeline();
+    loadTimelineData(d["unique"], -1);
+
     timeSvgTooltip.transition()
         .duration(200)
         .style("opacity", tooltipObjectOnOpacity);
@@ -245,6 +248,8 @@ function matchMouseOut(d) {
 
         unloadMapData(d["unique"]);
     }
+
+    clearTimeline();
 
     mapSvg.selectAll(".player-object").filter("._" + d["unique"])
         .transition()

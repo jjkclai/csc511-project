@@ -8,6 +8,7 @@
     <script src="./assets/scripts/map/svg-controller.js"></script>
     <script src="./assets/scripts/map/match-object-controller.js"></script>
     <script src="./assets/scripts/map/team-object-controller.js"></script>
+    <script src="./assets/scripts/map/timeline-object-controller.js"></script>
     <script src="./assets/scripts/map/player-object-controller.js"></script>
     <link rel="stylesheet" type="text/css" href="./assets/styles/map.css">
 </head>
@@ -21,6 +22,10 @@
         <svg id="time-svg" class="svg"></svg>
     </div>
     <div id="time-svg-tooltip" class="tooltip" style="opacity:0"></div>
+
+    <div id="timeline-svg-container" class="svg-container">
+        <svg id="timeline-svg" class="svg"></svg>
+    </div>
 
     <div id="query-system-container">
         <input type="text" id="query-textbox" class="textbox">
@@ -37,7 +42,7 @@
     d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/complete.csv").then(function(rows) {
         window.data=preprocess(rows);
 
-        visualizeTimeLine(data);
+        visualizeHistory(data);
     });
 
     window.mapSvg = d3.select("svg#map-svg");
@@ -46,9 +51,11 @@
     window.timeSvg = d3.select("svg#time-svg");
     window.timeSvgTooltip = d3.select("div#time-svg-tooltip");
 
+    window.timelineSvg = d3.select("svg#timeline-svg");
+
     window.addEventListener("resize", function() {
         clearTime();
-        visualizeTimeLine(data);
+        visualizeHistory(data);
     });
 
     mapSvg.append("image")

@@ -58,6 +58,9 @@ function playerMouseOver(d) {
         .style("opacity", matchObjectOnOpacity)
         .style("fill", "black");
 
+    clearTimeline();
+    loadTimelineData(d["unique"], d["playerid"] % 5);
+
     mapSvgTooltip.transition()
         .duration(200)
         .style("opacity", tooltipObjectOnOpacity);
@@ -113,6 +116,8 @@ function playerMouseOut(d) {
                 return "red";
             }
         });
+    
+    clearTimeline();
 
     mapSvgTooltip.transition()
         .duration(200)

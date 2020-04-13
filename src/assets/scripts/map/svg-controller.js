@@ -15,8 +15,18 @@ function unloadMapData(targetClass) {
     mapSvg.selectAll(".player-object").filter("._" + targetClass).remove();
 }
 
+function loadTimelineData(targetUnique, targetPos) {
+    let target = window.data.filter(d => d["unique"] == targetUnique);
+
+    visualizeTimeline(target, targetPos);
+}
+
 function clearTime() {
     timeSvg.selectAll("*").remove();
+}
+
+function clearTimeline() {
+    timelineSvg.selectAll("*").remove();
 }
 
 function clearAll() {

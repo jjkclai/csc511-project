@@ -13,7 +13,7 @@ function parseQuery(query) {
     }
     
     clearAll();
-    visualizeTimeLine(result);
+    visualizeHistory(result);
 }
 
 function tokenizer(str) {
