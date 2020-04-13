@@ -205,9 +205,9 @@ function calculator(tokens) {
 function retriever(indices) {
     let matches = window.data.filter((d, i) => indices[i]);
 
-    let gameidList = matches.map(d => d["gameid"]);
+    let uniqueList = matches.map(d => d["unique"]);
 
     return window.data.filter(function(d) {
-        return gameidList.includes(d["gameid"]);
+        return uniqueList.includes(d["unique"]);
     });
 }

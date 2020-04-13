@@ -51,7 +51,7 @@ function visualizeTimeLine(data) {
 
     let yScaleContext = d3.scaleLinear()
         .range([heightContext, 0])
-        .domain([0, d3.max(schedule, function(d) {
+        .domain([0, d3.max(window.data, function(d) {
             return d["count"];
         })]);
 
@@ -95,10 +95,10 @@ function visualizeTimeLine(data) {
         .enter()
         .append("rect")
             .attr("id", function(d) {
-                return d["gameid"];
+                return d["unique"];
             })
             .attr("class", function(d) {
-                return "match-object _" + d["gameid"];
+                return "match-object _" + d["unique"];
             })
             .style("opacity", matchObjectOffOpacity)
             .style("stroke", "black")
@@ -174,8 +174,8 @@ function matchMouseOver(d) {
         .style("opacity", matchObjectOnOpacity)
         .style("fill", "black");
         
-    loadMapData(d["gameid"], 1, 1);
-    mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
+    loadMapData(d["unique"], 1, 1);
+    mapSvg.selectAll(".player-object").filter("._" + d["unique"])
         .transition()
         .duration(100)
         .style("opacity", playerObjectOnOpacity);
@@ -190,6 +190,10 @@ function matchMouseOver(d) {
                 "<tr>" +
                     "<th>Game ID</th>" +
                     "<td>" + d["gameid"] + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<th>League</th>" +
+                    "<td>" + d["league"] + "</td>" +
                 "</tr>" +
                 "<tr>" +
                     "<th>Date</th>" +
@@ -223,8 +227,8 @@ function matchMouseOut(d) {
             }
         });
 
-        unloadMapData(d["gameid"]);
-        loadMapData(d["gameid"], 0, 1)
+        unloadMapData(d["unique"]);
+        loadMapData(d["unique"], 0, 1)
     }
     else {
         target.transition()
@@ -239,10 +243,10 @@ function matchMouseOut(d) {
             }
         });
 
-        unloadMapData(d["gameid"]);
+        unloadMapData(d["unique"]);
     }
 
-    mapSvg.selectAll(".player-object").filter("._" + d["gameid"])
+    mapSvg.selectAll(".player-object").filter("._" + d["unique"])
         .transition()
         .duration(100)
         .style("opacity", playerObjectOffOpacity);

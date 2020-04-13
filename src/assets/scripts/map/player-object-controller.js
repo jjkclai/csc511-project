@@ -19,10 +19,10 @@ function visualizePlayer(data) {
         .enter()
         .append("circle")
             .attr("id", function(d) {
-                return d["gameid"] + "-" + d["side"].toLowerCase() + "-" + d["position"].toLowerCase();
+                return d["unique"] + "-" + d["side"].toLowerCase() + "-" + d["position"].toLowerCase();
             })
             .attr("class", function(d) {
-                return "player-object _" + d["gameid"];
+                return "player-object _" + d["unique"];
             })
             .style("opacity", playerObjectOffOpacity)
             .style("stroke", "black")
@@ -52,7 +52,7 @@ function playerMouseOver(d) {
         .duration(100)
         .style("opacity", playerObjectOnOpacity);
     
-    timeSvg.selectAll(".match-object").filter("._" + d["gameid"])
+    timeSvg.selectAll(".match-object").filter("._" + d["unique"])
         .transition()
         .duration(100)
         .style("opacity", matchObjectOnOpacity)
@@ -101,7 +101,7 @@ function playerMouseOut(d) {
         .duration(100)
         .style("opacity", playerObjectOffOpacity);
     
-    timeSvg.selectAll(".match-object").filter("._" + d["gameid"])
+    timeSvg.selectAll(".match-object").filter("._" + d["unique"])
         .transition()
         .duration(100)
         .style("opacity", matchObjectOnOpacity)

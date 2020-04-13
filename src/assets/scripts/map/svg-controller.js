@@ -1,5 +1,5 @@
-function loadMapData(targetId, isTeam, isPlayer) {
-    let target = window.data.filter(d => d["gameid"] == targetId);
+function loadMapData(targetUnique, isTeam, isPlayer) {
+    let target = window.data.filter(d => d["unique"] == targetUnique);
 
     if(isTeam == 1) {
         visualizeTeam(target);
@@ -10,9 +10,9 @@ function loadMapData(targetId, isTeam, isPlayer) {
     }
 }
 
-function unloadMapData(targetId) {
-    mapSvg.selectAll(".team-object").filter("._" + targetId).remove();
-    mapSvg.selectAll(".player-object").filter("._" + targetId).remove();
+function unloadMapData(targetClass) {
+    mapSvg.selectAll(".team-object").filter("._" + targetClass).remove();
+    mapSvg.selectAll(".player-object").filter("._" + targetClass).remove();
 }
 
 function clearTime() {

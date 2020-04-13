@@ -34,7 +34,7 @@
     <div>
 
 <script>
-    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/2019-worlds.csv").then(function(rows) {
+    d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/complete.csv").then(function(rows) {
         window.data=preprocess(rows);
 
         visualizeTimeLine(data);
@@ -81,12 +81,14 @@
             return new Date(Math.round((excelDate - 25569) * 86400 * 1000) + offset * 60 * 60 * 1000);
         }
 
-        data = data.map(function(d) {
-            d["datetime"] = convertExcelDateToJSDateTime(d["date"], 6);
-            d["date_"] = new Date(d["datetime"].toDateString());
-            d["date"] = d["datetime"].toDateString().replace(/\s+/g, "-");
-            return d;
-        });
+        data = data.filter(d => d["date"] >= 30000)
+            .map(function(d) {
+                d["unique"] = d["gameid"] + "-" + d["league"] + "-" + d["url"].replace(/[^\w]/g,'');
+                d["datetime"] = convertExcelDateToJSDateTime(d["date"], 6);
+                d["date_"] = new Date(d["datetime"].toDateString());
+                d["date"] = d["datetime"].toDateString().replace(/\s+/g, "-");
+                return d;
+            });
 
         let partial = data.filter(d => d["playerid"] == "1");
 
@@ -100,7 +102,7 @@
             return 0;
         });
 
-        gameidTable = {};
+        uniqueTable = {};
         countTable = {};
         partial.forEach(function(d) {
             if(d["date_"] in countTable) {
@@ -110,11 +112,11 @@
                 countTable[d["date_"]] = 1;
             }
 
-            gameidTable[d["gameid"]] = countTable[d["date_"]];
+            uniqueTable[d["unique"]] = countTable[d["date_"]];
         });
 
         data = data.map(function(d) {
-            d["count"] = gameidTable[d["gameid"]];
+            d["count"] = uniqueTable[d["unique"]];
             return d;
         });
 
