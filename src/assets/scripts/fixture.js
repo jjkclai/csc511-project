@@ -43,7 +43,7 @@ function loadFixtures(i) {
  //console.log(i);
 
  d3.csv("https://raw.githubusercontent.com/jkclai/csc511-project/master/src/assets/csv/Lol_worldChampionshipMain.csv").then(function(data) {
-  //console.log(data[8].Year); 
+  //console.log(data[8].Q_R2_R_flag); 
   fixture_data = {
    "name": data[i].Champion,
    "img": data[i].Champion_flag,
@@ -71,13 +71,13 @@ function loadFixtures(i) {
 	 
       "children": [{
 	"name": data[i].Q_R1_C,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R1_C_flag,
      "score": data[i].Q_R1_C_Score,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
 	  },{
 	 "name": data[i].Q_R1_R,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R1_R_flag,
      "score": data[i].Q_R1_R_Score,
 	 "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
@@ -92,17 +92,15 @@ function loadFixtures(i) {
 	 "level": "C2",
 	 "matchDate":data[i].Q_R2_date,
 
-	 
-	 
-	       "children": [{
+	"children": [{
 	"name": data[i].Q_R2_C,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R2_C_flag,
      "score": data[i].Q_R2_C_Score,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
 	  },{
 	 "name": data[i].Q_R2_R,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R2_R_flag,
      "score": data[i].Q_R2_R_Score,
 	 "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
@@ -131,13 +129,13 @@ function loadFixtures(i) {
 	 
 	 "children": [{
 	"name": data[i].Q_R3_C,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R3_C_flag,
      "score": data[i].Q_R3_C_Score,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
 	  },{
 	 "name": data[i].Q_R3_R,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R3_R_flag,
      "score": data[i].Q_R3_R_Score,
 	 "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
@@ -155,13 +153,13 @@ function loadFixtures(i) {
 	 
 	       "children": [{
 	"name": data[i].Q_R4_C,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R4_C_flag,
      "score": data[i].Q_R4_C_Score,
      "stroke_color": "#55AE3A",
      "Stroke_width": "4px",
 	  },{
 	 "name": data[i].Q_R4_R,
-     //"img": data[i].Champion_flag,
+     "img": data[i].Q_R4_R_flag,
      "score": data[i].Q_R4_R_Score,
 	 "stroke_color": "#8da0cb",
      "Stroke_width": "3px",
@@ -267,7 +265,9 @@ function fixture() {
   .attr("dx", 40)
   .attr("dy", ".35em")
   .text(function(d) {
+	  if(d.data.level!="B1" && d.data.level!="B2" && d.data.level!="C1" && d.data.level!="C2"&& d.data.level!="C3"&& d.data.level!="C4" ){
    return d.data.name;
+	  }
   });
 
  // Append images
