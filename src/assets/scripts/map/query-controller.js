@@ -152,13 +152,60 @@ function parser(tokens) {
 function calculator(tokens) {
     function read(token) {
         let target = token["name"].split(":");
+        let result;
 
-        return window.data.map(function(d) {
-            if(d[target[0]].toLowerCase().includes(target[1].toLowerCase())) {
-                return true;
+        if(target[1][0] != ">" && target[1][0] != "<") {
+            result = window.data.map(function(d) {
+                if(d[target[0]].toLowerCase().includes(target[1].toLowerCase())) {
+                    return true;
+                }
+                return false;
+            });
+        }
+        else {
+            if(target[1][0] == ">") {
+                if(target[1][1] == "=") {
+                    target[1] = target[1].substring(2);
+                    result = window.data.map(function(d) {
+                        if(d[target[0]] >= target[1]) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+                else {
+                    target[1] = target[1].substring(1);
+                    result = window.data.map(function(d) {
+                        if(d[target[0]] > target[1]) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
             }
-            return false;
-        });
+            else {
+                if(target[1][1] == "=") {
+                    target[1] = target[1].substring(2);
+                    result = window.data.map(function(d) {
+                        if(d[target[0]] <= target[1]) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+                else {
+                    target[1] = target[1].substring(1);
+                    result = window.data.map(function(d) {
+                        if(d[target[0]] < target[1]) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }
+        }
+        
+        return result;
     }
 
     function calculateSingle(operand, operator) {
