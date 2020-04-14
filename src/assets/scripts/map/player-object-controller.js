@@ -160,7 +160,7 @@ function getIconPos(player) {
         return [x, y];
     }
 
-    let targetP2 = [14, 32, 50, 68, 86];
+    let targetP2 = [14, 32, 50, 86, 68];
 
     let offset = getDirection(player["side"]) * getOffset(player["k"], player["d"], player["a"]);
     

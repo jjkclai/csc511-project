@@ -163,45 +163,51 @@ function calculator(tokens) {
             });
         }
         else {
-            if(target[1][0] == ">") {
-                if(target[1][1] == "=") {
-                    target[1] = target[1].substring(2);
-                    result = window.data.map(function(d) {
-                        if(d[target[0]] >= target[1]) {
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-                else {
-                    target[1] = target[1].substring(1);
-                    result = window.data.map(function(d) {
-                        if(d[target[0]] > target[1]) {
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-            }
-            else {
-                if(target[1][1] == "=") {
-                    target[1] = target[1].substring(2);
-                    result = window.data.map(function(d) {
-                        if(d[target[0]] <= target[1]) {
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-                else {
-                    target[1] = target[1].substring(1);
-                    result = window.data.map(function(d) {
-                        if(d[target[0]] < target[1]) {
-                            return true;
-                        }
-                        return false;
-                    });
-                }
+            switch(target[1][0]) {
+                case ">":
+                    if(target[1][1] == "=") {
+                        target[1] = target[1].substring(2);
+                        result = window.data.map(function(d) {
+                            if(d[target[0]] >= target[1]) {
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+                    else {
+                        target[1] = target[1].substring(1);
+                        result = window.data.map(function(d) {
+                            if(d[target[0]] > target[1]) {
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+                    break;
+                
+                case "<":
+                    if(target[1][1] == "=") {
+                        target[1] = target[1].substring(2);
+                        result = window.data.map(function(d) {
+                            if(d[target[0]] <= target[1]) {
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+                    else {
+                        target[1] = target[1].substring(1);
+                        result = window.data.map(function(d) {
+                            if(d[target[0]] < target[1]) {
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
         
