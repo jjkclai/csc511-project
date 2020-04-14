@@ -46,7 +46,7 @@ function visualizePlayer(data) {
 function playerMouseOver(d) {
     mapSvg.selectAll("circle")
         .select(function(c) {
-            return c === d ? this : null;
+            return c["unique"] == d["unique"] ? this : null;
         })
         .transition()
         .duration(100)
@@ -98,7 +98,7 @@ function playerMouseMove() {
 function playerMouseOut(d) {
     mapSvg.selectAll("circle")
         .select(function(c) {
-            return c === d ? this : null;
+            return c["unique"] == d["unique"] ? this : null;
         })
         .transition()
         .duration(100)
